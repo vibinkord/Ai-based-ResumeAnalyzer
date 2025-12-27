@@ -1,0 +1,23 @@
+John Doe
+Email: john.doe@example.com | Phone: +1-555-1234
+Location: Remote
+
+Professional Summary
+Results-driven Java software engineer with 5+ years building backend systems.
+Experienced in Core Java, OOP, collections, multithreading, REST, and SQL.
+
+Skills
+- Java 8+, OOP, SOLID
+- Data Structures: ArrayList, HashMap, HashSet
+- File I/O, NIO
+- Concurrency: ExecutorService, Futures
+- Testing: JUnit (basic)
+- APIs: REST, JSON
+- Tools: Git, VS Code
+
+Experience
+- Built a resume analyzer prototype focusing on text parsing and comparison.
+- Implemented file reading utilities and basic analysis pipeline.
+
+Education
+B.Sc. in Computer Science

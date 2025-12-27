@@ -1,0 +1,15 @@
+Senior Java Engineer (Core Java)
+
+We are seeking a Java engineer with strong Core Java and OOP skills.
+Required skills:
+- Java 8+
+- OOP and SOLID principles
+- Collections: HashMap, HashSet, ArrayList
+- File I/O and NIO
+- Basic multithreading and ExecutorService
+- REST API fundamentals
+- SQL familiarity
+Optional skills: JUnit testing, Git, JSON.
+
+Responsibilities include reading resumes and job descriptions, extracting skills, comparing them,
+and generating a clear report with suggestions.
