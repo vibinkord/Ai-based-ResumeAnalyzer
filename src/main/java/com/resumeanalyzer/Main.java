@@ -47,7 +47,7 @@ public class Main {
             com.resumeanalyzer.analysis.SkillMatcher.Result result = matcher.match(resumeSkills, jobSkills);
             System.out.println("\nMatched Skills: " + result.getMatchedSkills());
             System.out.println("Missing Skills: " + result.getMissingSkills());
-            System.out.println("Resume Match Score: " + String.format("%.1f%%", result.getMatchPercentage()));
+            System.out.println("Resume Match Score: " + "%.1f%%".formatted(result.getMatchPercentage()));
 
             // --- TEMPORARY: Stage 4 Resume Suggestion Testing ---
             ResumeSuggestionEngine suggestionEngine = new ResumeSuggestionEngine();

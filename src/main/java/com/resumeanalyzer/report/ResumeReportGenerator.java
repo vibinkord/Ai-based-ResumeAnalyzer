@@ -34,7 +34,7 @@ public class ResumeReportGenerator {
         sb.append("\n");
 
         // Match percentage
-        sb.append("Resume Match Score: ").append(String.format("%.1f%%", result.getMatchPercentage())).append("\n");
+        sb.append("Resume Match Score: ").append("%.1f%%".formatted(result.getMatchPercentage())).append("\n");
         sb.append("\n");
 
         // Matched skills
