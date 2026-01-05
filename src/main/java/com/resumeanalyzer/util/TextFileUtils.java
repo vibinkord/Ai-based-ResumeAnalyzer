@@ -3,7 +3,7 @@ package com.resumeanalyzer.util;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Minimal utility for reading a UTF-8 text file into a String.
@@ -19,7 +19,8 @@ public final class TextFileUtils {
      * @throws IOException if reading fails
      */
     public static String readTextFile(String path) throws IOException {
-        byte[] bytes = Files.readAllBytes(Path.of(path));
+        byte[] bytes = Files.readAllBytes(Paths.get(path));
+        
         return new String(bytes, StandardCharsets.UTF_8);
     }
 }
