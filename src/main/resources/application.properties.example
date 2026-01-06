@@ -2,14 +2,15 @@
 spring.application.name=AI Resume Analyzer
 
 # Server port
-server.port=8082
+server.port=8083
 
 # Logging
 logging.level.root=INFO
 logging.level.com.resumeanalyzer=DEBUG
 
 # Gemini LLM API Configuration
+# Copy this file to application.properties and set GEMINI_API_KEY before running
 # Get your free API key from: https://ai.google.dev/
 # Ensure environment variable GEMINI_API_KEY is set
-gemini.api.key=AIzaSyDWvB-U2wtApPzH7wQOv6Yp8z48o7er_XE
+gemini.api.key=${GEMINI_API_KEY:}
 gemini.api.url=https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent
