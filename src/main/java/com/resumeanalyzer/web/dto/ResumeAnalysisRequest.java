@@ -7,6 +7,7 @@ package com.resumeanalyzer.web.dto;
 public class ResumeAnalysisRequest {
     private String resumeText;
     private String jobDescriptionText;
+    private String jobDescriptionUrl;
 
     public ResumeAnalysisRequest() {
     }
@@ -14,6 +15,12 @@ public class ResumeAnalysisRequest {
     public ResumeAnalysisRequest(String resumeText, String jobDescriptionText) {
         this.resumeText = resumeText;
         this.jobDescriptionText = jobDescriptionText;
+    }
+
+    public ResumeAnalysisRequest(String resumeText, String jobDescriptionText, String jobDescriptionUrl) {
+        this.resumeText = resumeText;
+        this.jobDescriptionText = jobDescriptionText;
+        this.jobDescriptionUrl = jobDescriptionUrl;
     }
 
     public String getResumeText() {
@@ -30,5 +37,13 @@ public class ResumeAnalysisRequest {
 
     public void setJobDescriptionText(String jobDescriptionText) {
         this.jobDescriptionText = jobDescriptionText;
+    }
+
+    public String getJobDescriptionUrl() {
+        return jobDescriptionUrl;
+    }
+
+    public void setJobDescriptionUrl(String jobDescriptionUrl) {
+        this.jobDescriptionUrl = jobDescriptionUrl;
     }
 }

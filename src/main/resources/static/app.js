@@ -18,6 +18,7 @@ const DOM = {
     // Text input elements
     resumeTextInput: document.getElementById('resumeText'),
     jobDescriptionInput: document.getElementById('jobDescriptionText'),
+    jobUrlInput: document.getElementById('jobUrlInput'),
     analyzeBtn: document.getElementById('analyzeBtn'),
     loadingSpinner: document.getElementById('loadingSpinner'),
     
@@ -26,6 +27,9 @@ const DOM = {
     detailsContainer: document.getElementById('detailsContainer'),
     errorContainer: document.getElementById('errorContainer'),
     errorMessage: document.getElementById('errorMessage'),
+    aiContainer: document.getElementById('aiContainer'),
+    suggestionsContainer2: document.getElementById('suggestionsContainer2'),
+    reportContainer2: document.getElementById('reportContainer2'),
     
     // Score and skills display
     matchScore: document.getElementById('matchScore'),
@@ -225,9 +229,10 @@ function showFilePreview(file) {
  */
 async function handleAnalyze() {
     const jobDescriptionText = DOM.jobDescriptionInput.value.trim();
+    const jobDescriptionUrl = DOM.jobUrlInput.value.trim();
     
-    if (!jobDescriptionText) {
-        showError('Please enter a job description.');
+    if (!jobDescriptionText && !jobDescriptionUrl) {
+        showError('Provide a job description or a LinkedIn/Internshala job link.');
         return;
     }
     
@@ -237,7 +242,7 @@ async function handleAnalyze() {
     try {
         if (state.useFileUpload && state.selectedFile) {
             // Analyze with file upload
-            await analyzeWithFile(jobDescriptionText);
+            await analyzeWithFile(jobDescriptionText, jobDescriptionUrl);
         } else {
             // Analyze with text input
             const resumeText = DOM.resumeTextInput.value.trim();
@@ -246,7 +251,7 @@ async function handleAnalyze() {
                 setButtonLoading(false);
                 return;
             }
-            await analyzeWithText(resumeText, jobDescriptionText);
+            await analyzeWithText(resumeText, jobDescriptionText, jobDescriptionUrl);
         }
     } catch (error) {
         console.error('Analysis error:', error);
@@ -259,10 +264,11 @@ async function handleAnalyze() {
 /**
  * Analyze with uploaded file
  */
-async function analyzeWithFile(jobDescriptionText) {
+async function analyzeWithFile(jobDescriptionText, jobDescriptionUrl) {
     const formData = new FormData();
     formData.append('resumeFile', state.selectedFile);
     formData.append('jobDescriptionText', jobDescriptionText);
+    formData.append('jobDescriptionUrl', jobDescriptionUrl);
     
     const response = await fetch('/api/analyze-file', {
         method: 'POST',
@@ -280,7 +286,7 @@ async function analyzeWithFile(jobDescriptionText) {
 /**
  * Analyze with text input
  */
-async function analyzeWithText(resumeText, jobDescriptionText) {
+async function analyzeWithText(resumeText, jobDescriptionText, jobDescriptionUrl) {
     const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: {
@@ -288,7 +294,8 @@ async function analyzeWithText(resumeText, jobDescriptionText) {
         },
         body: JSON.stringify({
             resumeText: resumeText,
-            jobDescriptionText: jobDescriptionText
+            jobDescriptionText: jobDescriptionText,
+            jobDescriptionUrl: jobDescriptionUrl
         })
     });
     
@@ -305,9 +312,11 @@ async function analyzeWithText(resumeText, jobDescriptionText) {
  * @param {Object} data - API response data
  */
 function displayResults(data) {
-    // Show results and details containers
+    // Show results and containers
     DOM.resultsContainer.classList.remove('hidden');
-    DOM.detailsContainer.classList.remove('hidden');
+    DOM.aiContainer.classList.remove('hidden');
+    DOM.suggestionsContainer2.classList.remove('hidden');
+    DOM.reportContainer2.classList.remove('hidden');
     
     // Scroll to results
     DOM.resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });

@@ -21,6 +21,7 @@ import com.resumeanalyzer.suggestions.ResumeSuggestionEngine;
 import com.resumeanalyzer.web.dto.ResumeAnalysisRequest;
 import com.resumeanalyzer.web.dto.ResumeAnalysisResponse;
 import com.resumeanalyzer.web.file.FileTextExtractorService;
+import com.resumeanalyzer.web.service.JobDescriptionFetcher;
 
 /**
  * REST controller for resume analysis API.
@@ -38,16 +39,19 @@ public class ResumeAnalysisController {
     private final ResumeReportGenerator reportGenerator;
     private final FileTextExtractorService fileTextExtractor;
     private final GeminiSuggestionService geminiSuggestionService;
+    private final JobDescriptionFetcher jobDescriptionFetcher;
 
     @Autowired
     public ResumeAnalysisController(FileTextExtractorService fileTextExtractor,
-                                    GeminiSuggestionService geminiSuggestionService) {
+                                    GeminiSuggestionService geminiSuggestionService,
+                                    JobDescriptionFetcher jobDescriptionFetcher) {
         this.skillExtractor = new SkillExtractor();
         this.skillMatcher = new SkillMatcher();
         this.suggestionEngine = new ResumeSuggestionEngine();
         this.reportGenerator = new ResumeReportGenerator();
         this.fileTextExtractor = fileTextExtractor;
         this.geminiSuggestionService = geminiSuggestionService;
+        this.jobDescriptionFetcher = jobDescriptionFetcher;
     }
 
     /**
@@ -62,9 +66,25 @@ public class ResumeAnalysisController {
      */
     @PostMapping("/analyze")
     public ResponseEntity<ResumeAnalysisResponse> analyze(@RequestBody ResumeAnalysisRequest request) {
+        String jobDescriptionText;
+        try {
+            jobDescriptionText = resolveJobDescriptionText(
+                request.getJobDescriptionText(),
+                request.getJobDescriptionUrl()
+            );
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+
+        if (jobDescriptionText == null || jobDescriptionText.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         // Extract skills from resume and job description
         Set<String> resumeSkills = skillExtractor.extractSkills(request.getResumeText());
-        Set<String> jobSkills = skillExtractor.extractSkills(request.getJobDescriptionText());
+        Set<String> jobSkills = skillExtractor.extractSkills(jobDescriptionText);
 
         // Match resume skills against job skills
         SkillMatcher.Result matchResult = skillMatcher.match(resumeSkills, jobSkills);
@@ -75,7 +95,7 @@ public class ResumeAnalysisController {
         // Generate AI-enhanced suggestions via Gemini API
         List<String> aiSuggestions = geminiSuggestionService.generateAISuggestions(
             request.getResumeText(),
-            request.getJobDescriptionText(),
+            jobDescriptionText,
             matchResult.getMatchedSkills(),
             matchResult.getMissingSkills(),
             matchResult.getMatchPercentage()
@@ -109,13 +129,10 @@ public class ResumeAnalysisController {
     @PostMapping("/analyze-file")
     public ResponseEntity<ResumeAnalysisResponse> analyzeFile(
             @RequestParam("resumeFile") MultipartFile resumeFile,
-            @RequestParam("jobDescriptionText") String jobDescriptionText) {
+            @RequestParam(value = "jobDescriptionText", required = false) String jobDescriptionText,
+            @RequestParam(value = "jobDescriptionUrl", required = false) String jobDescriptionUrl) {
         
         if (resumeFile == null || resumeFile.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if (jobDescriptionText == null || jobDescriptionText.trim().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -123,8 +140,13 @@ public class ResumeAnalysisController {
             // Extract text from uploaded file
             String resumeText = fileTextExtractor.extractText(resumeFile);
 
+            String resolvedJobDescriptionText = resolveJobDescriptionText(jobDescriptionText, jobDescriptionUrl);
+            if (resolvedJobDescriptionText == null || resolvedJobDescriptionText.isBlank()) {
+                return ResponseEntity.badRequest().build();
+            }
+
             // Create a request object with extracted text
-            ResumeAnalysisRequest request = new ResumeAnalysisRequest(resumeText, jobDescriptionText);
+            ResumeAnalysisRequest request = new ResumeAnalysisRequest(resumeText, resolvedJobDescriptionText);
 
             // Reuse existing analysis logic
             return analyze(request);
@@ -136,5 +158,18 @@ public class ResumeAnalysisController {
             // Return internal server error for file processing errors
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    private String resolveJobDescriptionText(String jobDescriptionText, String jobDescriptionUrl) throws IOException {
+        boolean hasText = jobDescriptionText != null && !jobDescriptionText.trim().isEmpty();
+        boolean hasUrl = jobDescriptionUrl != null && !jobDescriptionUrl.trim().isEmpty();
+
+        if (hasText) {
+            return jobDescriptionText;
+        }
+        if (hasUrl) {
+            return jobDescriptionFetcher.fetchJobDescription(jobDescriptionUrl);
+        }
+        throw new IllegalArgumentException("Job description text or URL is required");
     }
 }
