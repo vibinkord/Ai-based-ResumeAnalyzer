@@ -21,6 +21,8 @@ COPY src src
 # Build the application
 RUN ./mvnw clean package -DskipTests
 
-# Run the jar
+# Expose Spring Boot port
 EXPOSE 8080
-CMD ["java", "-jar", "target/*.jar"]
+
+# Run the jar (wildcard safe)
+CMD sh -c "java -jar target/*.jar"
