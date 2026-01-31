@@ -1,0 +1,24 @@
+# Ignore build artifacts except the executable jar required for the image
+target/*
+!target/resume-analyzer-1.0.0.jar
+
+# Maven and editor files
+.mvn/
+pom.xml
+.idea/
+*.iml
+
+# VCS
+.git
+.gitignore
+
+# OS files
+*.DS_Store
+*.log
+
+# Node artifacts (if present)
+node_modules/
+
+# Docker files (avoid including local Docker context unless needed)
+Dockerfile.dev
+docker-compose*.yml
