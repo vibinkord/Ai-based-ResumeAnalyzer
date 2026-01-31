@@ -56,3 +56,7 @@ npm-debug.log
 # Temporary files
 *.tmp
 *.temp
+
+
+*.bak_*
+AI-Based-Resume-Analyser/
