@@ -94,6 +94,21 @@ function toggleTheme() {
 function init() {
     // Theme toggle
     DOM.themeToggle.addEventListener('click', toggleTheme);
+
+    // Attach FAB after DOM is ready (in case markup is added after the script)
+    DOM.fabAnalyze = document.getElementById('fabAnalyze');
+    if (DOM.fabAnalyze) {
+        DOM.fabAnalyze.addEventListener('click', (e) => {
+            // Prefer triggering the existing analyze button (ensures same UX and validation).
+            if (DOM.analyzeBtn) {
+                DOM.analyzeBtn.click();
+                return;
+            }
+
+            // Fallback: call the handler directly
+            handleAnalyze();
+        });
+    }
     
     // Analyze button
     DOM.analyzeBtn.addEventListener('click', handleAnalyze);
@@ -270,7 +285,7 @@ async function analyzeWithFile(jobDescriptionText, jobDescriptionUrl) {
     formData.append('jobDescriptionText', jobDescriptionText);
     formData.append('jobDescriptionUrl', jobDescriptionUrl);
     
-    const response = await fetch('/api/analyze-file', {
+    const response = await fetch('api/analyze-file', {
         method: 'POST',
         body: formData
     });
@@ -287,7 +302,7 @@ async function analyzeWithFile(jobDescriptionText, jobDescriptionUrl) {
  * Analyze with text input
  */
 async function analyzeWithText(resumeText, jobDescriptionText, jobDescriptionUrl) {
-    const response = await fetch('/api/analyze', {
+    const response = await fetch('api/analyze', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -409,6 +424,16 @@ function setButtonLoading(isLoading) {
         DOM.loadingSpinner.classList.remove('hidden');
     } else {
         DOM.loadingSpinner.classList.add('hidden');
+    }
+
+    // Sync FAB loading/disabled state
+    if (DOM.fabAnalyze) {
+        DOM.fabAnalyze.disabled = isLoading;
+        if (isLoading) {
+            DOM.fabAnalyze.classList.add('loading');
+        } else {
+            DOM.fabAnalyze.classList.remove('loading');
+        }
     }
 }
 

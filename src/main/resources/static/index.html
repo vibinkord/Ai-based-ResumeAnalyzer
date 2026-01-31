@@ -428,6 +428,50 @@
             transform: translateY(-2px);
         }
 
+        /* Floating Analyze FAB (dynamic action button) */
+        .fab {
+            position: fixed;
+            right: 1rem;
+            bottom: 1rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 9999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(59,130,246,0.18);
+            z-index: 1100;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+        }
+
+        .fab:hover { transform: translateY(-4px) scale(1.03); }
+
+        .fab .fab-icon { font-size: 1.25rem; line-height: 1; }
+
+        .fab.loading { animation: fab-pulse 1s linear infinite; }
+
+        @keyframes fab-pulse {
+            0% { box-shadow: 0 10px 30px rgba(59,130,246,0.18); }
+            50% { box-shadow: 0 18px 40px rgba(59,130,246,0.28); transform: scale(1.02); }
+            100% { box-shadow: 0 10px 30px rgba(59,130,246,0.18); }
+        }
+
+        /* Hide original analyze button on small screens to favour the FAB */
+        @media (max-width: 1024px) {
+            #analyzeBtn { display: none; }
+            .fab { display: inline-flex; }
+        }
+
+        /* On larger screens keep both visible but allow FAB to be compact */
+        @media (min-width: 1025px) {
+            .fab { display: inline-flex; }
+        }
+
         .theme-icon {
             width: 2rem;
             height: 2rem;
@@ -464,10 +508,10 @@
                 <p class="text-slate-400 text-sm md:text-base">Analyze your resume against job descriptions instantly</p>
             </div>
 
-            <div class="content-grid grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-8 px-2 md:px-0">
+            <div class="content-grid flex flex-col gap-4 md:gap-6 mb-8 px-2 md:px-0">
                 <!-- Input Section -->
                 <div>
-                    <div class="card input-card p-5 md:p-6 sticky top-6">
+                    <div class="card input-card p-5 md:p-6">
                         <!-- Tabs -->
                         <div class="input-tabs">
                             <button class="tab-button active text-sm md:text-base" data-tab="upload">Upload Resume</button>
@@ -600,5 +644,9 @@
     </div>
 
     <script src="app.js"></script>
+    <!-- Floating Analyze FAB (dynamic action button) -->
+    <button id="fabAnalyze" class="fab" title="Analyze resume" type="button">
+        <span class="fab-icon">⚡</span>
+    </button>
 </body>
 </html>
