@@ -7,6 +7,14 @@ import com.resumeanalyzer.web.dto.ComparisonRequest;
 import com.resumeanalyzer.web.dto.ComparisonResponse;
 import com.resumeanalyzer.web.dto.HealthResponse;
 import com.resumeanalyzer.web.dto.SkillListResponse;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,6 +36,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/v1")
+@Tag(name = "Utility", description = "Utility endpoints for health checks, skill inventory, and batch processing")
 public class UtilityController {
 
     private static final Logger log = LoggerFactory.getLogger(UtilityController.class);
@@ -45,6 +54,18 @@ public class UtilityController {
      * @return ResponseEntity with health status
      */
     @GetMapping("/health")
+    @Operation(
+        summary = "Check API health status",
+        description = "Returns the health status of the API including version information and current timestamp",
+        operationId = "healthCheck"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "API is healthy and running",
+            content = @Content(schema = @Schema(implementation = HealthResponse.class))
+        )
+    })
     public ResponseEntity<HealthResponse> healthCheck() {
         log.debug("Health check requested");
         
@@ -67,6 +88,19 @@ public class UtilityController {
      * @return ResponseEntity with list of known skills
      */
     @GetMapping("/skills")
+    @Operation(
+        summary = "Retrieve all known technical skills",
+        description = "Returns a comprehensive list of 115+ technical skills recognized by the analyzer, " +
+                      "organized by category (programming languages, frameworks, databases, tools, etc.)",
+        operationId = "getKnownSkills"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "List of known skills retrieved successfully",
+            content = @Content(schema = @Schema(implementation = SkillListResponse.class))
+        )
+    })
     public ResponseEntity<SkillListResponse> getSkills() {
         log.debug("Skills list requested");
         
@@ -91,7 +125,35 @@ public class UtilityController {
      * @return ResponseEntity with batch analysis results
      */
     @PostMapping("/batch")
-    public ResponseEntity<BatchAnalysisResponse> batchAnalyze(@RequestBody BatchAnalysisRequest request) {
+    @Operation(
+        summary = "Batch analyze multiple resumes",
+        description = "Analyzes multiple resumes against job descriptions in a single request. " +
+                      "Each item in the batch is processed independently and results are returned " +
+                      "with success/failure status for each item.",
+        operationId = "batchAnalyzeResumes"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Batch analysis completed",
+            content = @Content(schema = @Schema(implementation = BatchAnalysisResponse.class))
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid batch request - missing or empty items"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Server error during batch processing"
+        )
+    })
+    public ResponseEntity<BatchAnalysisResponse> batchAnalyze(
+            @RequestBody 
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                description = "Batch analysis request containing list of resume-job pairs to analyze",
+                required = true
+            )
+            BatchAnalysisRequest request) {
         log.info("Batch analysis requested for {} items", request.getItems() != null ? request.getItems().size() : 0);
         
         if (request.getItems() == null || request.getItems().isEmpty()) {
@@ -150,7 +212,35 @@ public class UtilityController {
      * @return ResponseEntity with comparison results
      */
     @PostMapping("/compare")
-    public ResponseEntity<ComparisonResponse> compareResumes(@RequestBody ComparisonRequest request) {
+    @Operation(
+        summary = "Compare two resumes",
+        description = "Compares two resumes by extracting skills from both and identifying common, " +
+                      "unique-to-resume-1, and unique-to-resume-2 skills. Returns a similarity percentage " +
+                      "based on the proportion of common skills.",
+        operationId = "compareResumes"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Comparison completed successfully",
+            content = @Content(schema = @Schema(implementation = ComparisonResponse.class))
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid comparison request - missing resume content"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Server error during comparison"
+        )
+    })
+    public ResponseEntity<ComparisonResponse> compareResumes(
+            @RequestBody 
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                description = "Comparison request containing two resume texts to compare",
+                required = true
+            )
+            ComparisonRequest request) {
         log.info("Resume comparison requested");
         
         if (request.getResume1() == null || request.getResume1().isEmpty() ||

@@ -15,6 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import com.resumeanalyzer.ai.GeminiSuggestionService;
 import com.resumeanalyzer.analysis.SkillExtractor;
 import com.resumeanalyzer.analysis.SkillMatcher;
@@ -35,6 +43,7 @@ import com.resumeanalyzer.web.service.JobDescriptionFetcher;
  */
 @RestController
 @RequestMapping("/api")
+@Tag(name = "Resume Analysis", description = "Endpoints for analyzing resumes and matching against job descriptions")
 public class ResumeAnalysisController {
 
     private static final Logger log = LoggerFactory.getLogger(ResumeAnalysisController.class);
@@ -74,7 +83,35 @@ public class ResumeAnalysisController {
      * @throws ValidationException if input validation fails
      */
     @PostMapping("/analyze")
-    public ResponseEntity<ResumeAnalysisResponse> analyze(@RequestBody ResumeAnalysisRequest request) {
+    @Operation(
+        summary = "Analyze resume text against job description",
+        description = "Analyzes a resume and matches it against a job description. " +
+                      "Extracts skills, identifies matches/gaps, and provides both rule-based and " +
+                      "AI-enhanced suggestions. Returns a comprehensive analysis report.",
+        operationId = "analyzeResume"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Resume analysis completed successfully",
+            content = @Content(schema = @Schema(implementation = ResumeAnalysisResponse.class))
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid input - resume or job description text is missing or too short"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Server error during analysis"
+        )
+    })
+    public ResponseEntity<ResumeAnalysisResponse> analyze(
+            @RequestBody 
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                description = "Resume analysis request containing resume text and job description",
+                required = true
+            )
+            ResumeAnalysisRequest request) {
         log.info("Received resume analysis request");
         
         // Validate input
@@ -158,10 +195,42 @@ public class ResumeAnalysisController {
      * @throws ValidationException if validation fails
      */
     @PostMapping("/analyze-file")
+    @Operation(
+        summary = "Analyze uploaded resume file against job description",
+        description = "Analyzes an uploaded resume file (PDF, DOCX, or TXT) and matches it against a job description. " +
+                      "Supports providing job description as text or URL. Returns the same comprehensive analysis " +
+                      "as the text-based endpoint.",
+        operationId = "analyzeResumeFile"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "File analysis completed successfully",
+            content = @Content(schema = @Schema(implementation = ResumeAnalysisResponse.class))
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid input - missing or invalid file, job description, or file too large"
+        ),
+        @ApiResponse(
+            responseCode = "413",
+            description = "File too large - resume file exceeds size limit"
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Server error during file processing"
+        )
+    })
     public ResponseEntity<ResumeAnalysisResponse> analyzeFile(
-            @RequestParam("resumeFile") MultipartFile resumeFile,
-            @RequestParam(value = "jobDescriptionText", required = false) String jobDescriptionText,
-            @RequestParam(value = "jobDescriptionUrl", required = false) String jobDescriptionUrl) {
+            @RequestParam("resumeFile") 
+            @Parameter(description = "Resume file to analyze (PDF, DOCX, or TXT)")
+            MultipartFile resumeFile,
+            @RequestParam(value = "jobDescriptionText", required = false) 
+            @Parameter(description = "Job description text (alternative to URL)")
+            String jobDescriptionText,
+            @RequestParam(value = "jobDescriptionUrl", required = false) 
+            @Parameter(description = "URL to fetch job description from (alternative to text)")
+            String jobDescriptionUrl) {
         
         log.info("Received file upload analysis request");
         

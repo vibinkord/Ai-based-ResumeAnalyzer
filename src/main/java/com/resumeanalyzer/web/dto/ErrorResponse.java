@@ -1,6 +1,8 @@
 package com.resumeanalyzer.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDateTime;
 
 /**
@@ -9,12 +11,42 @@ import java.time.LocalDateTime;
  * Used by GlobalExceptionHandler to return consistent error responses to clients.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Schema(
+    name = "ErrorResponse",
+    description = "Standard error response from the API"
+)
 public class ErrorResponse {
     
+    @Schema(
+        description = "Error message describing what went wrong",
+        example = "Resume text is required and must be at least 50 characters"
+    )
     private String error;
+
+    @Schema(
+        description = "Error code for programmatic error handling",
+        example = "VALIDATION_ERROR",
+        allowableValues = {"VALIDATION_ERROR", "FILE_PROCESSING_ERROR", "SKILL_EXTRACTION_ERROR", 
+                          "ANALYSIS_ERROR", "INTERNAL_SERVER_ERROR"}
+    )
     private String code;
+
+    @Schema(
+        description = "Timestamp when the error occurred",
+        example = "2024-01-15T10:30:45.123456"
+    )
     private LocalDateTime timestamp;
+
+    @Schema(
+        description = "Additional details about the error (optional)",
+        example = "Resume text length: 45 characters. Minimum required: 50 characters"
+    )
     private String details;
+
+    @Schema(
+        description = "The request path where error occurred (optional)",
+        example = "/api/analyze"
+    )
     private String path;
 
     /**
