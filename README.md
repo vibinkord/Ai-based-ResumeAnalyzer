@@ -58,6 +58,7 @@ Spring Boot REST API accepting JSON requests and returning JSON responses.
 - **Java 17+** (tested with Java 17 and Java 23)
 - **Maven 3.6+** (for Spring Boot web app)
 - **Git** (for version control)
+- **Modern Web Browser** (Chrome, Firefox, Safari, Edge)
 
 ### Option 1: Console Application
 
@@ -69,15 +70,35 @@ javac -d out src/main/java/com/resumeanalyzer/**/*.java
 java -cp out com.resumeanalyzer.Main
 ```
 
-### Option 2: Web API (REST)
+### Option 2: Web API with Modern UI
 
 ```bash
 # Start Spring Boot application
 mvn spring-boot:run
 
-# Test the API
+# Open in browser
+http://localhost:8080/
+
+# Web UI Features:
+# ✅ User authentication (login/register)
+# ✅ Resume analyzer with file upload
+# ✅ Analysis history tracking
+# ✅ Dark mode theme toggle
+# ✅ Mobile-friendly responsive design
+```
+
+### Option 3: API Testing
+
+```bash
+# First, login to get JWT token
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@example.com","password":"password123"}'
+
+# Then use the token in analysis requests
 curl -X POST http://localhost:8080/api/analyze \
   -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
   -d '{"resumeText":"Java developer with Spring Boot","jobDescriptionText":"Need Java Spring developer"}'
 ```
 
@@ -498,6 +519,67 @@ logging.level.com.resumeanalyzer=DEBUG
 - **[API_TESTING_GUIDE.md](API_TESTING_GUIDE.md)** — Complete API testing guide with cURL, Postman, Python, JavaScript examples
 - **[README_WEB.md](README_WEB.md)** — Web features and Spring Boot architecture
 - **[WEB_STAGE_COMPLETION_SUMMARY.md](WEB_STAGE_COMPLETION_SUMMARY.md)** — Detailed Stage W1 completion summary
+
+---
+
+## 🖥️ User Interface & Dashboard
+
+### Modern Web UI (Task 11 Update)
+The application now includes a **professional, production-ready web interface** featuring:
+
+#### Authentication System
+- **Login/Register Pages** with JWT-based authentication
+- **Secure Token Management** (Access + Refresh tokens)
+- **User Profile Management** with preference settings
+
+#### Dashboard Pages
+1. **Analyzer** — Resume analysis with real-time results
+   - File upload (PDF, TXT) with drag-and-drop
+   - Text paste option for quick testing
+   - Job description input
+   - Instant analysis with score, matched/missing skills
+   - AI suggestions and recommendations
+   - Save analysis to history
+
+2. **Profile** — User information and preferences
+   - Display user name, email, and role
+   - Manage notification preferences
+   - Configure alert subscriptions
+
+3. **Job Alerts** — Alert subscription management
+   - Create job alerts with custom filters
+   - Set alert frequency (daily, weekly, monthly)
+   - Manage active subscriptions
+
+4. **History** — Analysis archive
+   - View all previous analyses
+   - Sort by date (most recent first)
+   - Compare analysis results
+   - Reload and reanalyze
+
+#### UI Features
+- ✅ **Responsive Design** — Mobile, tablet, and desktop optimized
+- ✅ **Dark Mode** — Light/dark theme toggle (persisted)
+- ✅ **Real-time Results** — Instant feedback on analysis
+- ✅ **Error Handling** — User-friendly error messages
+- ✅ **Loading States** — Visual feedback during processing
+- ✅ **Success Notifications** — Toast-style notifications
+- ✅ **Keyboard Shortcuts** — Ctrl+Enter to analyze
+- ✅ **Floating Action Button** — Quick access on mobile
+
+### UI Documentation
+- **[UI_QUICKSTART.md](docs/UI_QUICKSTART.md)** — Get started in 5 minutes
+- **[UI_CHANGES.md](docs/UI_CHANGES.md)** — Comprehensive UI documentation
+- **[UI_SUMMARY.md](docs/UI_SUMMARY.md)** — Features, architecture, and integration guide
+
+### Technology Stack
+- **Frontend Framework**: Vanilla JavaScript (no build tools)
+- **Styling**: Tailwind CSS + Custom CSS
+- **Theme Management**: CSS Variables + localStorage
+- **State Management**: localStorage for persistence
+- **Authentication**: JWT tokens
+- **Icons**: Unicode/Emoji
+- **Responsive**: Mobile-first design
 
 ---
 
