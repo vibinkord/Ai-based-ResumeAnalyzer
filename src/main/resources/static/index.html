@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Resume Analyzer</title>
+    <title>AI Resume Analyzer - Advanced Resume Matching & Career Tool</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -90,7 +90,7 @@
             box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
         }
 
-        .btn-analyze {
+        .btn-primary {
             background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
             border: none;
             border-radius: 8px;
@@ -102,14 +102,30 @@
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
 
-        .btn-analyze:hover:not(:disabled) {
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4);
         }
 
-        .btn-analyze:disabled {
+        .btn-primary:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--card-bg);
+            border-color: var(--accent-blue);
         }
 
         .skill-badge {
@@ -203,7 +219,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Responsive container for large screens */
         .main-container {
             width: 100%;
             height: auto;
@@ -237,7 +252,6 @@
             }
         }
 
-        /* Scrollbar styling for better appearance */
         .input-card::-webkit-scrollbar,
         .results-card::-webkit-scrollbar,
         .report-text::-webkit-scrollbar {
@@ -274,6 +288,12 @@
             animation: fadeIn 0.3s ease;
             transition: all 0.3s ease;
         }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+            padding: 1rem;
             border-radius: 8px;
             margin-bottom: 1rem;
             animation: fadeIn 0.3s ease;
@@ -303,7 +323,6 @@
             background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
         }
 
-        /* Drag and drop zone */
         .drop-zone {
             border: 2px dashed var(--accent-blue);
             border-radius: 8px;
@@ -428,7 +447,150 @@
             transform: translateY(-2px);
         }
 
-        /* Floating Analyze FAB (dynamic action button) */
+        /* Navbar Styles */
+        .navbar {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .navbar-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-link:hover {
+            color: var(--accent-blue);
+        }
+
+        .navbar-link.active {
+            color: var(--accent-blue);
+            border-bottom: 2px solid var(--accent-blue);
+            padding-bottom: 0.25rem;
+        }
+
+        /* Page visibility */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Auth Form Styles */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        /* User Profile Styles */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .profile-info h2 {
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-info p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Job Alert Styles */
+        .alert-item {
+            background: var(--input-bg);
+            border-left: 3px solid var(--accent-blue);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .alert-item:hover {
+            border-left-color: var(--accent-purple);
+            background: var(--card-bg);
+        }
+
+        .alert-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-meta {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        /* Floating Analyze FAB */
         .fab {
             position: fixed;
             right: 1rem;
@@ -461,13 +623,11 @@
             100% { box-shadow: 0 10px 30px rgba(59,130,246,0.18); }
         }
 
-        /* Hide original analyze button on small screens to favour the FAB */
         @media (max-width: 1024px) {
             #analyzeBtn { display: none; }
             .fab { display: inline-flex; }
         }
 
-        /* On larger screens keep both visible but allow FAB to be compact */
         @media (min-width: 1025px) {
             .fab { display: inline-flex; }
         }
@@ -489,164 +649,455 @@
         .theme-toggle.light .moon-icon {
             opacity: 0.4;
         }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+            max-width: 400px;
+        }
+
+        .notification.success {
+            border-left: 3px solid var(--accent-green);
+        }
+
+        .notification.error {
+            border-left: 3px solid var(--accent-red);
+        }
+
+        /* Responsive Grid */
+        .responsive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
     </style>
 </head>
 <body>
-    <!-- Theme Toggle Switch -->
-    <button class="theme-toggle light" id="themeToggle" title="Toggle theme">
-        <span class="theme-icon sun-icon">☀️</span>
-        <span class="theme-icon moon-icon">🌙</span>
-    </button>
+    <!-- Auth Page -->
+    <div id="authPage" class="page active">
+        <!-- Theme Toggle for Auth Page -->
+        <button class="theme-toggle light" id="themeToggle" title="Toggle theme">
+            <span class="theme-icon sun-icon">☀️</span>
+            <span class="theme-icon moon-icon">🌙</span>
+        </button>
 
-    <div class="min-h-screen py-6 px-3 sm:px-4 md:px-5 lg:px-6">
-        <div class="main-container">
-            <!-- Header -->
-            <div class="mb-6 md:mb-8 px-2 md:px-0">
-                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-3">
-                    <span class="gradient-text">AI Resume Analyzer</span>
-                </h1>
-                <p class="text-slate-400 text-sm md:text-base">Analyze your resume against job descriptions instantly</p>
+        <div class="auth-container">
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-card">
+                <div class="card p-8">
+                    <div class="mb-8 text-center">
+                        <h1 class="text-4xl font-bold mb-2">
+                            <span class="gradient-text">AI Resume Analyzer</span>
+                        </h1>
+                        <p class="text-sm text-slate-400">Master Your Career with AI-Powered Resume Insights</p>
+                    </div>
+
+                    <div id="loginError" class="hidden error-message text-sm mb-4"></div>
+
+                    <form id="loginFormElement" class="space-y-4">
+                        <div class="form-group">
+                            <label for="loginEmail" class="form-label">Email Address</label>
+                            <input type="email" id="loginEmail" class="form-input input-field" placeholder="you@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" id="loginPassword" class="form-input input-field" placeholder="••••••••" required>
+                        </div>
+
+                        <button type="submit" class="btn-primary w-full py-3 flex items-center justify-center gap-2">
+                            <span>Sign In</span>
+                            <span id="loginSpinner" class="hidden loading-spinner"></span>
+                        </button>
+                    </form>
+
+                    <p class="text-center text-sm text-slate-400 mt-4">
+                        Don't have an account? 
+                        <button class="text-blue-500 hover:text-blue-600 cursor-pointer" id="showRegisterBtn">Create one</button>
+                    </p>
+                </div>
             </div>
 
-            <div class="content-grid flex flex-col gap-4 md:gap-6 mb-8 px-2 md:px-0">
-                <!-- Input Section -->
-                <div>
-                    <div class="card input-card p-5 md:p-6">
-                        <!-- Tabs -->
-                        <div class="input-tabs">
-                            <button class="tab-button active text-sm md:text-base" data-tab="upload">Upload Resume</button>
-                            <button class="tab-button text-sm md:text-base" data-tab="paste">Paste Resume</button>
+            <!-- Register Form -->
+            <div id="registerForm" class="auth-card hidden">
+                <div class="card p-8">
+                    <div class="mb-8 text-center">
+                        <h1 class="text-4xl font-bold mb-2">
+                            <span class="gradient-text">Join Us</span>
+                        </h1>
+                        <p class="text-sm text-slate-400">Create your account to get started</p>
+                    </div>
+
+                    <div id="registerError" class="hidden error-message text-sm mb-4"></div>
+
+                    <form id="registerFormElement" class="space-y-4">
+                        <div class="form-group">
+                            <label for="registerFullName" class="form-label">Full Name</label>
+                            <input type="text" id="registerFullName" class="form-input input-field" placeholder="John Doe" required>
                         </div>
 
-                        <!-- Upload Tab -->
-                        <div id="upload-tab" class="tab-content active">
-                            <div class="drop-zone" id="dropZone">
-                                <div class="drop-zone-text mb-2 text-sm md:text-base">📁 Drag & Drop your resume here</div>
-                                <div class="drop-zone-text text-xs md:text-sm">or click to select (PDF, TXT)</div>
-                                <input type="file" id="resumeFile" accept=".pdf,.txt" style="display: none;" />
-                            </div>
-                            <div id="filePreview" class="hidden"></div>
+                        <div class="form-group">
+                            <label for="registerEmail" class="form-label">Email Address</label>
+                            <input type="email" id="registerEmail" class="form-input input-field" placeholder="you@example.com" required>
                         </div>
 
-                        <!-- Paste Tab -->
-                        <div id="paste-tab" class="tab-content">
-                            <textarea
-                                id="resumeText"
-                                class="input-field w-full h-40 md:h-48 p-3 md:p-4 resize-none text-sm"
-                                placeholder="Paste your resume text here..."
-                            ></textarea>
+                        <div class="form-group">
+                            <label for="registerPassword" class="form-label">Password</label>
+                            <input type="password" id="registerPassword" class="form-input input-field" placeholder="••••••••" required>
                         </div>
 
-                        <!-- Job Description / URL (always visible) -->
-                        <h2 class="text-base md:text-lg font-semibold text-slate-100 mb-4 mt-6">Job Details</h2>
-                        <div class="flex flex-col gap-3 mb-4">
-                            <div class="flex flex-col gap-2">
-                                <label for="jobDescriptionText" class="text-xs md:text-sm text-slate-300 font-medium">Description (paste text)</label>
-                                <textarea
-                                    id="jobDescriptionText"
-                                    class="input-field w-full h-24 md:h-28 p-3 resize-none text-sm"
-                                    placeholder="Paste the job description..."
-                                ></textarea>
-                            </div>
-                            <div class="flex flex-col gap-2">
-                                <label for="jobUrlInput" class="text-xs md:text-sm text-slate-300 font-medium">Job link (LinkedIn or Internshala)</label>
-                                <input
-                                    id="jobUrlInput"
-                                    type="url"
-                                    class="input-field w-full p-3 text-sm"
-                                    placeholder="https://www.linkedin.com/jobs/view/..."
-                                />
-                                <p class="text-xs text-slate-400">Paste a job link if you don't have the text</p>
-                            </div>
+                        <div class="form-group">
+                            <label for="registerConfirmPassword" class="form-label">Confirm Password</label>
+                            <input type="password" id="registerConfirmPassword" class="form-input input-field" placeholder="••••••••" required>
                         </div>
-                        <p class="text-xs text-slate-400 mb-4 leading-relaxed">Provide either a description or a supported job link. Text takes priority if both given.</p>
 
-                        <button
-                            id="analyzeBtn"
-                            class="btn-analyze w-full flex items-center justify-center gap-2 text-sm md:text-base py-3"
-                        >
-                            <span>Analyze Resume</span>
-                            <span id="loadingSpinner" class="hidden loading-spinner"></span>
+                        <button type="submit" class="btn-primary w-full py-3 flex items-center justify-center gap-2">
+                            <span>Create Account</span>
+                            <span id="registerSpinner" class="hidden loading-spinner"></span>
                         </button>
+                    </form>
+
+                    <p class="text-center text-sm text-slate-400 mt-4">
+                        Already have an account? 
+                        <button class="text-blue-500 hover:text-blue-600 cursor-pointer" id="showLoginBtn">Sign in</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="page">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-brand gradient-text">AI Resume Analyzer</div>
+            <ul class="navbar-menu">
+                <li><button class="navbar-link active" data-page="analyzer">Analyzer</button></li>
+                <li><button class="navbar-link" data-page="profile">Profile</button></li>
+                <li><button class="navbar-link" data-page="alerts">Job Alerts</button></li>
+                <li><button class="navbar-link" data-page="history">History</button></li>
+                <li><button id="logoutBtn" class="navbar-link">Logout</button></li>
+            </ul>
+        </nav>
+
+        <!-- Theme Toggle for Dashboard -->
+        <button class="theme-toggle light" id="themeToggleDashboard" title="Toggle theme">
+            <span class="theme-icon sun-icon">☀️</span>
+            <span class="theme-icon moon-icon">🌙</span>
+        </button>
+
+        <div class="min-h-screen py-6 px-3 sm:px-4 md:px-5 lg:px-6">
+            <div class="main-container">
+                <!-- Analyzer Page -->
+                <div id="analyzerContent" class="dashboard-content active">
+                    <div class="mb-6 md:mb-8 px-2 md:px-0">
+                        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-3">
+                            <span class="gradient-text">Analyze Your Resume</span>
+                        </h1>
+                        <p class="text-slate-400 text-sm md:text-base">Instant AI-powered analysis against job descriptions</p>
+                    </div>
+
+                    <div class="content-grid flex flex-col gap-4 md:gap-6 mb-8 px-2 md:px-0">
+                        <!-- Input Section -->
+                        <div>
+                            <div class="card input-card p-5 md:p-6">
+                                <!-- Tabs -->
+                                <div class="input-tabs">
+                                    <button class="tab-button active text-sm md:text-base" data-tab="upload">Upload Resume</button>
+                                    <button class="tab-button text-sm md:text-base" data-tab="paste">Paste Resume</button>
+                                </div>
+
+                                <!-- Upload Tab -->
+                                <div id="upload-tab" class="tab-content active">
+                                    <div class="drop-zone" id="dropZone">
+                                        <div class="drop-zone-text mb-2 text-sm md:text-base">📁 Drag & Drop your resume here</div>
+                                        <div class="drop-zone-text text-xs md:text-sm">or click to select (PDF, TXT)</div>
+                                        <input type="file" id="resumeFile" accept=".pdf,.txt" style="display: none;" />
+                                    </div>
+                                    <div id="filePreview" class="hidden"></div>
+                                </div>
+
+                                <!-- Paste Tab -->
+                                <div id="paste-tab" class="tab-content">
+                                    <textarea
+                                        id="resumeText"
+                                        class="input-field w-full h-40 md:h-48 p-3 md:p-4 resize-none text-sm"
+                                        placeholder="Paste your resume text here..."
+                                    ></textarea>
+                                </div>
+
+                                <!-- Job Description / URL -->
+                                <h2 class="text-base md:text-lg font-semibold text-slate-100 mb-4 mt-6">Job Details</h2>
+                                <div class="flex flex-col gap-3 mb-4">
+                                    <div class="flex flex-col gap-2">
+                                        <label for="jobDescriptionText" class="text-xs md:text-sm text-slate-300 font-medium">Description (paste text)</label>
+                                        <textarea
+                                            id="jobDescriptionText"
+                                            class="input-field w-full h-24 md:h-28 p-3 resize-none text-sm"
+                                            placeholder="Paste the job description..."
+                                        ></textarea>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <label for="jobUrlInput" class="text-xs md:text-sm text-slate-300 font-medium">Job link (LinkedIn or Internshala)</label>
+                                        <input
+                                            id="jobUrlInput"
+                                            type="url"
+                                            class="input-field w-full p-3 text-sm"
+                                            placeholder="https://www.linkedin.com/jobs/view/..."
+                                        />
+                                        <p class="text-xs text-slate-400">Paste a job link if you don't have the text</p>
+                                    </div>
+                                </div>
+
+                                <button
+                                    id="analyzeBtn"
+                                    class="btn-primary w-full flex items-center justify-center gap-2 text-sm md:text-base py-3"
+                                >
+                                    <span>Analyze Resume</span>
+                                    <span id="loadingSpinner" class="hidden loading-spinner"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Results Section -->
+                        <div class="flex flex-col gap-4 md:gap-6">
+                            <!-- Results Container -->
+                            <div id="resultsContainer" class="hidden">
+                                <div class="card results-card p-5 md:p-6">
+                                    <h2 class="text-base md:text-lg font-semibold text-slate-100 mb-6">Analysis Results</h2>
+
+                                    <!-- Match Score -->
+                                    <div class="mb-8">
+                                        <p class="text-slate-400 text-xs md:text-sm mb-3">Resume Match Score</p>
+                                        <div class="match-score-display text-5xl md:text-6xl" id="matchScore">0%</div>
+                                    </div>
+
+                                    <!-- Matched Skills -->
+                                    <div class="mb-6">
+                                        <h3 class="text-xs md:text-sm font-semibold text-slate-300 mb-3">Matched Skills</h3>
+                                        <div id="matchedSkillsContainer" class="flex flex-wrap gap-2">
+                                            <span class="text-slate-400 text-xs md:text-sm">None</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Missing Skills -->
+                                    <div>
+                                        <h3 class="text-xs md:text-sm font-semibold text-slate-300 mb-3">Missing Skills</h3>
+                                        <div id="missingSkillsContainer" class="flex flex-wrap gap-2">
+                                            <span class="text-slate-400 text-xs md:text-sm">None</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Save Analysis Button -->
+                                    <button id="saveAnalysisBtn" class="btn-secondary w-full py-2 mt-6">
+                                        Save Analysis to History
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Error Message -->
+                            <div id="errorContainer" class="hidden">
+                                <div id="errorMessage" class="error-message text-sm"></div>
+                            </div>
+
+                            <!-- AI Suggestions -->
+                            <div id="aiContainer" class="hidden">
+                                <div class="card p-5 md:p-6">
+                                    <h2 class="text-base md:text-lg font-semibold text-slate-100 mb-2">🤖 AI-Powered Suggestions</h2>
+                                    <p class="text-xs md:text-sm text-slate-400 mb-4">Intelligent recommendations from Gemini AI</p>
+                                    <div id="aiSuggestionsContainer" class="space-y-3">
+                                        <p class="text-slate-400 text-sm">No AI suggestions available</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Rule-based Suggestions -->
+                            <div id="suggestionsContainer2" class="hidden">
+                                <div class="card p-5 md:p-6">
+                                    <h2 class="text-base md:text-lg font-semibold text-slate-100 mb-2">💡 Quick Tips</h2>
+                                    <p class="text-xs md:text-sm text-slate-400 mb-4">Rule-based improvement suggestions</p>
+                                    <div id="suggestionsContainer" class="space-y-3">
+                                        <p class="text-slate-400 text-sm">No suggestions</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Report -->
+                            <div id="reportContainer2" class="hidden">
+                                <div class="card p-5 md:p-6">
+                                    <h2 class="text-base md:text-lg font-semibold text-slate-100 mb-4">📊 Full Analysis Report</h2>
+                                    <div id="reportContainer" class="report-text text-xs md:text-sm">
+                                        No report available
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Results & Details Section -->
-                <div class="flex flex-col gap-4 md:gap-6">
-                    <!-- Results Section -->
-                    <div id="resultsContainer" class="hidden">
-                        <div class="card results-card p-5 md:p-6">
-                            <h2 class="text-base md:text-lg font-semibold text-slate-100 mb-6">Analysis Results</h2>
+                <!-- Profile Page -->
+                <div id="profileContent" class="dashboard-content hidden">
+                    <h1 class="text-3xl sm:text-4xl font-bold mb-8">
+                        <span class="gradient-text">My Profile</span>
+                    </h1>
 
-                            <!-- Match Score -->
-                            <div class="mb-8">
-                                <p class="text-slate-400 text-xs md:text-sm mb-3">Resume Match Score</p>
-                                <div class="match-score-display text-5xl md:text-6xl" id="matchScore">0%</div>
+                    <div class="card p-5 md:p-6 mb-6">
+                        <div class="profile-header">
+                            <div class="profile-avatar" id="userAvatar">👤</div>
+                            <div class="profile-info">
+                                <h2 id="userName">Loading...</h2>
+                                <p id="userEmail">Loading...</p>
+                                <p id="userRole">User Role</p>
                             </div>
+                        </div>
 
-                            <!-- Matched Skills -->
-                            <div class="mb-6">
-                                <h3 class="text-xs md:text-sm font-semibold text-slate-300 mb-3">Matched Skills</h3>
-                                <div id="matchedSkillsContainer" class="flex flex-wrap gap-2">
-                                    <span class="text-slate-400 text-xs md:text-sm">None</span>
-                                </div>
-                            </div>
-
-                            <!-- Missing Skills -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <h3 class="text-xs md:text-sm font-semibold text-slate-300 mb-3">Missing Skills</h3>
-                                <div id="missingSkillsContainer" class="flex flex-wrap gap-2">
-                                    <span class="text-slate-400 text-xs md:text-sm">None</span>
-                                </div>
+                                <label class="form-label">Full Name</label>
+                                <input type="text" id="profileFullName" class="form-input input-field" disabled>
+                            </div>
+                            <div>
+                                <label class="form-label">Email</label>
+                                <input type="email" id="profileEmail" class="form-input input-field" disabled>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Error Message -->
-                    <div id="errorContainer" class="hidden">
-                        <div id="errorMessage" class="error-message text-sm"></div>
-                    </div>
+                        <h3 class="text-lg font-semibold mt-6 mb-3">Preferences</h3>
+                        <div class="space-y-3">
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" id="emailNotifications" checked>
+                                <span>Receive email notifications for new matches</span>
+                            </label>
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" id="jobAlerts" checked>
+                                <span>Subscribe to job alerts</span>
+                            </label>
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" id="weeklyDigest" checked>
+                                <span>Receive weekly digest of matching jobs</span>
+                            </label>
+                        </div>
 
-                    <!-- AI Suggestions -->
-                    <div id="aiContainer" class="hidden">
-                        <div class="card p-5 md:p-6">
-                            <h2 class="text-base md:text-lg font-semibold text-slate-100 mb-2">🤖 AI-Powered Suggestions</h2>
-                            <p class="text-xs md:text-sm text-slate-400 mb-4">Intelligent recommendations from Gemini AI</p>
-                            <div id="aiSuggestionsContainer" class="space-y-3">
-                                <p class="text-slate-400 text-sm">No AI suggestions available</p>
+                        <button class="btn-primary w-full mt-6 py-3">Save Preferences</button>
+                    </div>
+                </div>
+
+                <!-- Job Alerts Page -->
+                <div id="alertsContent" class="dashboard-content hidden">
+                    <h1 class="text-3xl sm:text-4xl font-bold mb-8">
+                        <span class="gradient-text">Job Alerts</span>
+                    </h1>
+
+                    <div class="card p-5 md:p-6 mb-6">
+                        <h2 class="text-lg font-semibold mb-4">Create Job Alert</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="form-label">Job Title</label>
+                                <input type="text" id="alertJobTitle" class="form-input input-field" placeholder="e.g., Software Engineer">
+                            </div>
+                            <div>
+                                <label class="form-label">Company</label>
+                                <input type="text" id="alertCompany" class="form-input input-field" placeholder="e.g., Google">
+                            </div>
+                            <div>
+                                <label class="form-label">Required Skills (comma-separated)</label>
+                                <input type="text" id="alertSkills" class="form-input input-field" placeholder="Python, JavaScript, React">
+                            </div>
+                            <div>
+                                <label class="form-label">Frequency</label>
+                                <select id="alertFrequency" class="form-input input-field">
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
                             </div>
                         </div>
+                        <button class="btn-primary w-full mt-4 py-3">Create Alert</button>
                     </div>
 
-                    <!-- Rule-based Suggestions -->
-                    <div id="suggestionsContainer2" class="hidden">
-                        <div class="card p-5 md:p-6">
-                            <h2 class="text-base md:text-lg font-semibold text-slate-100 mb-2">💡 Quick Tips</h2>
-                            <p class="text-xs md:text-sm text-slate-400 mb-4">Rule-based improvement suggestions</p>
-                            <div id="suggestionsContainer" class="space-y-3">
-                                <p class="text-slate-400 text-sm">No suggestions</p>
-                            </div>
+                    <div>
+                        <h2 class="text-lg font-semibold mb-4">Active Alerts</h2>
+                        <div id="alertsListContainer" class="space-y-4">
+                            <p class="text-slate-400">No active alerts yet</p>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Report -->
-                    <div id="reportContainer2" class="hidden">
-                        <div class="card p-5 md:p-6">
-                            <h2 class="text-base md:text-lg font-semibold text-slate-100 mb-4">📊 Full Analysis Report</h2>
-                            <div id="reportContainer" class="report-text text-xs md:text-sm">
-                                No report available
-                            </div>
-                        </div>
+                <!-- History Page -->
+                <div id="historyContent" class="dashboard-content hidden">
+                    <h1 class="text-3xl sm:text-4xl font-bold mb-8">
+                        <span class="gradient-text">Analysis History</span>
+                    </h1>
+
+                    <div id="historyListContainer" class="space-y-4">
+                        <p class="text-slate-400">No analysis history yet</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="app.js"></script>
-    <!-- Floating Analyze FAB (dynamic action button) -->
-    <button id="fabAnalyze" class="fab" title="Analyze resume" type="button">
+    <!-- Floating Analyze FAB -->
+    <button id="fabAnalyze" class="fab hidden" title="Analyze resume" type="button">
         <span class="fab-icon">⚡</span>
     </button>
+
+    <!-- Scripts -->
+    <script src="app-auth.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

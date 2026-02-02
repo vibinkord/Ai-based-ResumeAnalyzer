@@ -1,8 +1,6 @@
 /**
  * AI Resume Analyzer - Frontend Application
- * Vanilla JavaScript, no frameworks or build tools
- * Supports file upload (PDF, TXT) and text input
- * Includes light/dark theme toggle
+ * Main analyzer logic with authentication support
  */
 
 const DOM = {
@@ -24,7 +22,6 @@ const DOM = {
     
     // Results elements
     resultsContainer: document.getElementById('resultsContainer'),
-    detailsContainer: document.getElementById('detailsContainer'),
     errorContainer: document.getElementById('errorContainer'),
     errorMessage: document.getElementById('errorMessage'),
     aiContainer: document.getElementById('aiContainer'),
@@ -38,80 +35,65 @@ const DOM = {
     suggestionsContainer: document.getElementById('suggestionsContainer'),
     aiSuggestionsContainer: document.getElementById('aiSuggestionsContainer'),
     reportContainer: document.getElementById('reportContainer'),
-    
-    // Theme toggle
-    themeToggle: document.getElementById('themeToggle'),
-    htmlElement: document.documentElement
+
+    // Navigation elements
+    navLinks: document.querySelectorAll('[data-page]'),
+    dashboardContents: document.querySelectorAll('.dashboard-content'),
+    saveAnalysisBtn: document.getElementById('saveAnalysisBtn'),
+
+    // History elements
+    historyListContainer: document.getElementById('historyListContainer'),
+    alertsListContainer: document.getElementById('alertsListContainer'),
+
+    // Job alerts elements
+    alertJobTitle: document.getElementById('alertJobTitle'),
+    alertCompany: document.getElementById('alertCompany'),
+    alertSkills: document.getElementById('alertSkills'),
+    alertFrequency: document.getElementById('alertFrequency'),
 };
 
 // State management
 let state = {
     selectedFile: null,
     useFileUpload: true,
-    currentTheme: 'light'
+    currentPage: 'analyzer',
+    analysisHistory: JSON.parse(localStorage.getItem('analysisHistory') || '[]'),
+    lastAnalysisResult: null
 };
 
 /**
- * Initialize theme on page load
+ * Initialize the application
  */
-function initTheme() {
-    // Get saved theme from localStorage, default to 'light'
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    state.currentTheme = savedTheme;
-    applyTheme(savedTheme);
-}
-
-/**
- * Apply theme to the page
- */
-function applyTheme(theme) {
-    // Remove both classes
-    DOM.htmlElement.classList.remove('light', 'dark');
-    
-    // Add the selected theme class
-    DOM.htmlElement.classList.add(theme);
-    
-    // Update toggle button appearance
-    DOM.themeToggle.classList.remove('light', 'dark');
-    DOM.themeToggle.classList.add(theme);
-    
-    // Save to localStorage
-    localStorage.setItem('theme', theme);
-    state.currentTheme = theme;
-}
-
-/**
- * Toggle between light and dark themes
- */
-function toggleTheme() {
-    const newTheme = state.currentTheme === 'light' ? 'dark' : 'light';
-    applyTheme(newTheme);
-}
-
-/**
- * Initialize event listeners
- */
-function init() {
-    // Theme toggle
-    DOM.themeToggle.addEventListener('click', toggleTheme);
-
-    // Attach FAB after DOM is ready (in case markup is added after the script)
-    DOM.fabAnalyze = document.getElementById('fabAnalyze');
-    if (DOM.fabAnalyze) {
-        DOM.fabAnalyze.addEventListener('click', (e) => {
-            // Prefer triggering the existing analyze button (ensures same UX and validation).
-            if (DOM.analyzeBtn) {
-                DOM.analyzeBtn.click();
-                return;
-            }
-
-            // Fallback: call the handler directly
-            handleAnalyze();
-        });
+function initApp() {
+    if (!AUTH.isAuthenticated()) {
+        return; // User not authenticated, auth page will be shown
     }
-    
+
+    // Setup analyzer event listeners
+    setupAnalyzerListeners();
+
+    // Setup navigation
+    setupNavigation();
+
+    // Load history
+    loadAnalysisHistory();
+
+    // Show FAB for analyzer
+    const fabAnalyze = document.getElementById('fabAnalyze');
+    if (fabAnalyze) {
+        fabAnalyze.classList.remove('hidden');
+        fabAnalyze.addEventListener('click', handleAnalyze);
+    }
+}
+
+/**
+ * Setup analyzer event listeners
+ */
+function setupAnalyzerListeners() {
     // Analyze button
-    DOM.analyzeBtn.addEventListener('click', handleAnalyze);
+    if (DOM.analyzeBtn) {
+        DOM.analyzeBtn.addEventListener('click', handleAnalyze);
+    }
     
     // Tab navigation
     DOM.tabButtons.forEach(button => {
@@ -122,29 +104,31 @@ function init() {
     });
     
     // File upload handlers
-    DOM.dropZone.addEventListener('click', () => DOM.resumeFile.click());
-    DOM.resumeFile.addEventListener('change', handleFileSelect);
-    
-    // Drag and drop
-    DOM.dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        DOM.dropZone.classList.add('drag-over');
-    });
-    
-    DOM.dropZone.addEventListener('dragleave', () => {
-        DOM.dropZone.classList.remove('drag-over');
-    });
-    
-    DOM.dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        DOM.dropZone.classList.remove('drag-over');
+    if (DOM.dropZone) {
+        DOM.dropZone.addEventListener('click', () => DOM.resumeFile.click());
+        DOM.resumeFile.addEventListener('change', handleFileSelect);
         
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-            DOM.resumeFile.files = files;
-            handleFileSelect({ target: { files: files } });
-        }
-    });
+        // Drag and drop
+        DOM.dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            DOM.dropZone.classList.add('drag-over');
+        });
+        
+        DOM.dropZone.addEventListener('dragleave', () => {
+            DOM.dropZone.classList.remove('drag-over');
+        });
+        
+        DOM.dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            DOM.dropZone.classList.remove('drag-over');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                DOM.resumeFile.files = files;
+                handleFileSelect({ target: { files: files } });
+            }
+        });
+    }
     
     // Keyboard shortcuts
     if (DOM.resumeTextInput) {
@@ -153,9 +137,63 @@ function init() {
         });
     }
     
-    DOM.jobDescriptionInput.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key === 'Enter') handleAnalyze();
+    if (DOM.jobDescriptionInput) {
+        DOM.jobDescriptionInput.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') handleAnalyze();
+        });
+    }
+
+    // Save analysis button
+    if (DOM.saveAnalysisBtn) {
+        DOM.saveAnalysisBtn.addEventListener('click', saveAnalysisToHistory);
+    }
+}
+
+/**
+ * Setup navigation between pages
+ */
+function setupNavigation() {
+    DOM.navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const page = e.target.dataset.page;
+            if (page) {
+                switchPage(page);
+            }
+        });
     });
+}
+
+/**
+ * Switch between dashboard pages
+ */
+function switchPage(page) {
+    // Update active nav link
+    DOM.navLinks.forEach(link => {
+        if (link.dataset.page === page) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+
+    // Update content visibility
+    DOM.dashboardContents.forEach(content => {
+        if (content.id === page + 'Content') {
+            content.classList.add('active');
+        } else {
+            content.classList.remove('active');
+        }
+    });
+
+    state.currentPage = page;
+
+    // Refresh page-specific content
+    if (page === 'history') {
+        loadAnalysisHistory();
+    } else if (page === 'alerts') {
+        loadJobAlerts();
+    }
 }
 
 /**
@@ -287,6 +325,7 @@ async function analyzeWithFile(jobDescriptionText, jobDescriptionUrl) {
     
     const response = await fetch('api/analyze-file', {
         method: 'POST',
+        headers: AUTH.getAuthHeader(),
         body: formData
     });
     
@@ -304,9 +343,7 @@ async function analyzeWithFile(jobDescriptionText, jobDescriptionUrl) {
 async function analyzeWithText(resumeText, jobDescriptionText, jobDescriptionUrl) {
     const response = await fetch('api/analyze', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: AUTH.getAuthHeader(),
         body: JSON.stringify({
             resumeText: resumeText,
             jobDescriptionText: jobDescriptionText,
@@ -324,9 +361,11 @@ async function analyzeWithText(resumeText, jobDescriptionText, jobDescriptionUrl
 
 /**
  * Display analysis results in the UI
- * @param {Object} data - API response data
  */
 function displayResults(data) {
+    // Store the result
+    state.lastAnalysisResult = data;
+
     // Show results and containers
     DOM.resultsContainer.classList.remove('hidden');
     DOM.aiContainer.classList.remove('hidden');
@@ -398,26 +437,116 @@ function displayResults(data) {
 }
 
 /**
+ * Save analysis to history
+ */
+function saveAnalysisToHistory() {
+    if (!state.lastAnalysisResult) {
+        showError('No analysis to save');
+        return;
+    }
+
+    const analysis = {
+        id: Date.now(),
+        timestamp: new Date().toLocaleString(),
+        matchPercentage: state.lastAnalysisResult.matchPercentage,
+        matchedSkills: state.lastAnalysisResult.matchedSkills,
+        missingSkills: state.lastAnalysisResult.missingSkills,
+        suggestions: state.lastAnalysisResult.suggestions,
+        aiSuggestions: state.lastAnalysisResult.aiSuggestions,
+        report: state.lastAnalysisResult.report
+    };
+
+    state.analysisHistory.push(analysis);
+    localStorage.setItem('analysisHistory', JSON.stringify(state.analysisHistory));
+
+    showSuccess('Analysis saved to history!');
+}
+
+/**
+ * Load analysis history
+ */
+function loadAnalysisHistory() {
+    if (!DOM.historyListContainer) return;
+
+    if (state.analysisHistory.length === 0) {
+        DOM.historyListContainer.innerHTML = '<p class="text-slate-400">No analysis history yet</p>';
+        return;
+    }
+
+    DOM.historyListContainer.innerHTML = state.analysisHistory
+        .reverse()
+        .map(analysis => `
+            <div class="card p-5 md:p-6">
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <p class="text-sm text-slate-400">${analysis.timestamp}</p>
+                        <p class="text-2xl font-bold mt-2">
+                            <span class="${analysis.matchPercentage >= 80 ? 'score-green' : analysis.matchPercentage >= 50 ? 'score-yellow' : 'score-red'}" style="background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                                ${parseFloat(analysis.matchPercentage).toFixed(1)}%
+                            </span>
+                        </p>
+                    </div>
+                    <button class="btn-secondary px-3 py-2 text-sm" onclick="loadAnalysisDetails(${analysis.id})">
+                        View Details
+                    </button>
+                </div>
+                <div class="text-sm text-slate-400">
+                    <p>Matched: ${analysis.matchedSkills.length} skills | Missing: ${analysis.missingSkills.length} skills</p>
+                </div>
+            </div>
+        `)
+        .join('');
+}
+
+/**
+ * Load job alerts
+ */
+function loadJobAlerts() {
+    if (!DOM.alertsListContainer) return;
+
+    // This would load alerts from the server
+    // For now, show placeholder
+    DOM.alertsListContainer.innerHTML = '<p class="text-slate-400">No active alerts yet. Create your first alert above!</p>';
+}
+
+/**
  * Show error message
- * @param {string} message - Error message to display
  */
 function showError(message) {
-    DOM.errorMessage.textContent = message;
-    DOM.errorContainer.classList.remove('hidden');
+    if (DOM.errorMessage && DOM.errorContainer) {
+        DOM.errorMessage.textContent = message;
+        DOM.errorContainer.classList.remove('hidden');
+    }
 }
 
 /**
  * Hide error message
  */
 function hideError() {
-    DOM.errorContainer.classList.add('hidden');
+    if (DOM.errorContainer) {
+        DOM.errorContainer.classList.add('hidden');
+    }
+}
+
+/**
+ * Show success notification
+ */
+function showSuccess(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification success';
+    notification.innerHTML = `<div style="color: #86efac;">✓ ${message}</div>`;
+    document.body.appendChild(notification);
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
 }
 
 /**
  * Set button loading state
- * @param {boolean} isLoading - Loading state
  */
 function setButtonLoading(isLoading) {
+    if (!DOM.analyzeBtn) return;
+
     DOM.analyzeBtn.disabled = isLoading;
     
     if (isLoading) {
@@ -427,20 +556,19 @@ function setButtonLoading(isLoading) {
     }
 
     // Sync FAB loading/disabled state
-    if (DOM.fabAnalyze) {
-        DOM.fabAnalyze.disabled = isLoading;
+    const fabAnalyze = document.getElementById('fabAnalyze');
+    if (fabAnalyze) {
+        fabAnalyze.disabled = isLoading;
         if (isLoading) {
-            DOM.fabAnalyze.classList.add('loading');
+            fabAnalyze.classList.add('loading');
         } else {
-            DOM.fabAnalyze.classList.remove('loading');
+            fabAnalyze.classList.remove('loading');
         }
     }
 }
 
 /**
  * Escape HTML special characters to prevent XSS
- * @param {string} text - Text to escape
- * @returns {string} Escaped text
  */
 function escapeHtml(text) {
     const div = document.createElement('div');
@@ -448,13 +576,24 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+/**
+ * Load analysis details from history
+ */
+function loadAnalysisDetails(id) {
+    const analysis = state.analysisHistory.find(a => a.id === id);
+    if (analysis) {
+        // Scroll to analyzer
+        switchPage('analyzer');
+        
+        // Display the analysis
+        displayResults(analysis);
+        state.lastAnalysisResult = analysis;
+    }
+}
+
 // Initialize the application when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        initTheme();
-        init();
-    });
+    document.addEventListener('DOMContentLoaded', initApp);
 } else {
-    initTheme();
-    init();
+    initApp();
 }
