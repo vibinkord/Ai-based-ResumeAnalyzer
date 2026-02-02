@@ -254,7 +254,7 @@ class PerformanceControllerTest {
             .avgResponseTimeMs(250.5)
             .p95ResponseTimeMs(500.0)
             .p99ResponseTimeMs(750.0)
-            .requestsPerSecond(100.0)
+            .requestsPerSecond(100L)
             .build();
 
         PerformanceMetricsDto metricsDto = PerformanceMetricsDto.builder()

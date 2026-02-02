@@ -42,7 +42,6 @@ public class JobMatchingServiceTest {
 
         testResume = new Resume();
         testResume.setId(1L);
-        testResume.setFileName("test.pdf");
         testResume.setContent("Java Spring Boot Docker Kubernetes AWS");
 
         testAlert = new JobAlert();
