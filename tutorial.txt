@@ -1,0 +1,86 @@
+# How to Use the AI Resume Analyzer
+
+Welcome to the AI Resume Analyzer! This guide will help you set up and run the project on your local machine.
+
+## 📋 Prerequisites
+
+- **Java 17** or higher installed.
+- **Git** (to clone the repository).
+- **Maven** (optional, the project includes a wrapper script).
+
+## ⚙️ Setup & Configuration
+
+1.  **Configure the Application**:
+    The project requires an API key for the Gemini AI features.
+    
+    - Navigate to `src/main/resources/`.
+    - Rename `application.properties.example` to `application.properties`.
+    - Open `application.properties` and add your Google Gemini API key:
+      ```properties
+      gemini.api.key=YOUR_ACTUAL_API_KEY_HERE
+      ```
+      (You can get a free key from https://ai.google.dev/)
+    
+    *Note: The default server port is configured to **8083**.*
+
+2.  **Make Scripts Executable** (Linux/Mac):
+    If you are on Linux or macOS, ensure the run script is executable:
+    ```bash
+    chmod +x run.sh mvnw
+    ```
+
+## 🚀 Running the Application
+
+You can run the project in two modes: as a Web Application (recommended) or as a standalone Console Tool.
+
+### Option 1: Web Application (Recommended)
+
+This launches the full application with the web interface and REST API.
+
+**Method A: Using the Run Script (Linux/Mac)**
+This script automatically handles process cleanup and startup.
+```bash
+./run.sh
+```
+
+**Method B: Using Maven Wrapper (All Platforms)**
+```bash
+./mvnw spring-boot:run
+```
+
+**Access the Application:**
+Once the server starts (look for "Started ResumeAnalyzerApplication"), open your browser and go to:
+👉 **http://localhost:8083**
+
+### Option 2: Console Application
+
+This runs the core logic directly in your terminal without the web server. It works best with text files (`.txt`).
+
+1.  **Compile the code:**
+    ```bash
+    javac -d out src/main/java/com/resumeanalyzer/**/*.java
+    ```
+
+2.  **Run the analyzer:**
+    Pass the path to a resume file and a job description file.
+    ```bash
+    java -cp out com.resumeanalyzer.Main data/sample_resume.txt data/sample_job.txt
+    ```
+
+## 🛠️ Usage Tips
+
+- **Web Interface:** 
+  - You can **upload** a `.txt` or `.pdf` resume (PDF support depends on backend implementation).
+  - Or **paste** the resume text directly.
+  - Paste the **Job Description** or a link to a LinkedIn/Internshala job post.
+  - Click **Analyze Resume** to see the match score, missing skills, and AI-powered suggestions.
+
+- **Theme:** Use the toggle in the top-right corner to switch between Light and Dark modes.
+
+## ❓ Troubleshooting
+
+- **Port 8083 already in use?**
+  - The `run.sh` script attempts to kill processes on port 8082 (legacy config). If 8083 is blocked, edit `src/main/resources/application.properties` and change `server.port` to a different number (e.g., 8081).
+- **Gemini API Errors?**
+  - Ensure you have set a valid `gemini.api.key` in `application.properties`.
+  - Check your internet connection.
