@@ -236,6 +236,85 @@ See **API_TESTING_GUIDE.md** for complete examples.
 
 ---
 
+## 💾 Database Architecture & Persistence
+
+The application uses **Spring Data JPA** with **Hibernate** for object-relational mapping and **Flyway** for database schema management.
+
+### Supported Databases
+- **PostgreSQL** (Production) - Full JSONB support for storing structured data
+- **H2** (Testing) - In-memory database for fast unit tests
+
+### Core Entities
+
+```
+User (1:N) → Resume (1:N) → Analysis
+  │ email, password, fullName     │ filename, content      │ matchPercentage, skills, suggestions
+  └─ Created/Updated timestamps   └─ User association      └─ Job description, report, AI suggestions
+```
+
+### Key Features
+- ✅ **Automatic Auditing** - createdAt/updatedAt timestamps
+- ✅ **Cascade Operations** - Delete user → deletes resumes & analyses
+- ✅ **Performance Indexes** - Optimized for user/resume/analysis lookups
+- ✅ **Migration Management** - Flyway handles schema versioning
+- ✅ **Repository Pattern** - Clean data access layer with Spring Data JPA
+
+### Database Setup
+
+#### PostgreSQL (Development/Production)
+
+```bash
+# Create database
+createdb resume_analyzer
+
+# Start with migrations
+mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=dev"
+
+# Flyway automatically applies migrations on startup
+```
+
+#### H2 (Testing)
+
+```bash
+# H2 in-memory database runs automatically with tests
+mvn test
+
+# Migrations disabled, Hibernate DDL creates schema
+```
+
+### Entity Relationships
+
+**User → Resume** (One-to-Many with orphanRemoval)
+- User can have multiple resumes
+- Deleting user automatically deletes all associated resumes
+- Configured with `cascade = CascadeType.ALL, orphanRemoval = true`
+
+**Resume → Analysis** (One-to-Many with orphanRemoval)
+- Resume can have multiple analyses
+- Deleting resume automatically deletes all associated analyses
+- Each analysis contains job description match and skill suggestions
+
+### Repository Methods
+
+```java
+// User Repository
+userRepository.findByEmail(email);
+userRepository.findByEmailIgnoreCase(email);
+
+// Resume Repository
+resumeRepository.findByUserId(userId);
+resumeRepository.findByUserIdOrderByCreatedAtDesc(userId);
+
+// Analysis Repository
+analysisRepository.findByResumeId(resumeId);
+analysisRepository.findGoodMatches();  // 70%+ score
+analysisRepository.findByDateRange(start, end);
+```
+
+📖 **Full Database Documentation**: See [docs/DATABASE.md](docs/DATABASE.md)
+
+---
+
 ## 🧪 Testing
 
 ### Console Application Test
