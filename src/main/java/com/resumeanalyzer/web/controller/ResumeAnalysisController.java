@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +36,8 @@ import com.resumeanalyzer.web.service.JobDescriptionFetcher;
 @RestController
 @RequestMapping("/api")
 public class ResumeAnalysisController {
+
+    private static final Logger log = LoggerFactory.getLogger(ResumeAnalysisController.class);
 
     private final SkillExtractor skillExtractor;
     private final SkillMatcher skillMatcher;
@@ -71,6 +75,8 @@ public class ResumeAnalysisController {
      */
     @PostMapping("/analyze")
     public ResponseEntity<ResumeAnalysisResponse> analyze(@RequestBody ResumeAnalysisRequest request) {
+        log.info("Received resume analysis request");
+        
         // Validate input
         String resumeText = request.getResumeText();
         String jobDescriptionText;
@@ -81,23 +87,35 @@ public class ResumeAnalysisController {
                 request.getJobDescriptionUrl()
             );
         } catch (IllegalArgumentException e) {
+            log.warn("Job description resolution failed: {}", e.getMessage());
             throw e; // Let GlobalExceptionHandler handle it
         } catch (IOException e) {
+            log.error("Failed to fetch job description from URL", e);
             throw new FileProcessingException("Failed to fetch job description from URL", e);
         }
 
         // Validate both inputs
         requestValidator.validateAnalysisRequest(resumeText, jobDescriptionText);
 
+        log.debug("Input validation passed, extracting skills");
+        
         // Extract skills from resume and job description
         Set<String> resumeSkills = skillExtractor.extractSkills(resumeText);
         Set<String> jobSkills = skillExtractor.extractSkills(jobDescriptionText);
+        
+        log.debug("Extracted {} skills from resume and {} skills from job description", 
+                resumeSkills.size(), jobSkills.size());
 
         // Match resume skills against job skills
         SkillMatcher.Result matchResult = skillMatcher.match(resumeSkills, jobSkills);
+        log.info("Skill matching completed: {} matched, {} missing, {}% match rate",
+                matchResult.getMatchedSkills().size(),
+                matchResult.getMissingSkills().size(),
+                matchResult.getMatchPercentage());
 
         // Generate rule-based improvement suggestions
         List<String> suggestions = suggestionEngine.generateSuggestions(matchResult);
+        log.debug("Generated {} rule-based suggestions", suggestions.size());
 
         // Generate AI-enhanced suggestions via Gemini API
         List<String> aiSuggestions = geminiSuggestionService.generateAISuggestions(
@@ -107,9 +125,11 @@ public class ResumeAnalysisController {
             matchResult.getMissingSkills(),
             matchResult.getMatchPercentage()
         );
+        log.debug("Generated {} AI-enhanced suggestions", aiSuggestions.size());
 
         // Generate formatted report
         String report = reportGenerator.generateReport(matchResult, suggestions);
+        log.debug("Report generated successfully");
 
         // Populate response DTO with both rule-based and AI suggestions
         ResumeAnalysisResponse response = new ResumeAnalysisResponse(
@@ -121,6 +141,7 @@ public class ResumeAnalysisController {
                 report
         );
 
+        log.info("Resume analysis completed successfully");
         return ResponseEntity.ok(response);
     }
 
@@ -142,13 +163,19 @@ public class ResumeAnalysisController {
             @RequestParam(value = "jobDescriptionText", required = false) String jobDescriptionText,
             @RequestParam(value = "jobDescriptionUrl", required = false) String jobDescriptionUrl) {
         
+        log.info("Received file upload analysis request");
+        
         if (resumeFile == null || resumeFile.isEmpty()) {
+            log.warn("Resume file is empty or null");
             throw new FileProcessingException("Resume file cannot be empty");
         }
 
         try {
+            log.debug("Extracting text from uploaded file: {}", resumeFile.getOriginalFilename());
+            
             // Extract text from uploaded file
             String resumeText = fileTextExtractor.extractText(resumeFile);
+            log.debug("Successfully extracted {} characters from file", resumeText.length());
 
             // Validate extracted resume text
             requestValidator.validateResumeText(resumeText);
@@ -161,14 +188,18 @@ public class ResumeAnalysisController {
             // Create a request object with extracted text
             ResumeAnalysisRequest request = new ResumeAnalysisRequest(resumeText, resolvedJobDescriptionText);
 
+            log.info("File validation passed, proceeding with analysis");
+            
             // Reuse existing analysis logic
             return analyze(request);
 
         } catch (IllegalArgumentException e) {
+            log.warn("File analysis failed with illegal argument: {}", e.getMessage());
             // Re-throw to let GlobalExceptionHandler handle it
             throw e;
         } catch (IOException e) {
             // Wrap in FileProcessingException
+            log.error("Failed to process uploaded resume file: {}", e.getMessage(), e);
             throw new FileProcessingException("Failed to process uploaded resume file", e);
         }
     }
