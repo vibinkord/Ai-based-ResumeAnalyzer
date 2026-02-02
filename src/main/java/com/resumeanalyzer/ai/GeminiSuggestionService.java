@@ -8,6 +8,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -38,7 +39,13 @@ public class GeminiSuggestionService {
 
     /**
      * Public entry point for AI suggestions.
+     * Results are cached for identical resume/job description combinations.
      */
+    @Cacheable(
+        value = "resume-suggestions",
+        key = "#resumeText.hashCode() + '-' + #jobDescriptionText.hashCode() + '-' + #matchPercentage",
+        unless = "#result == null || #result.isEmpty()"
+    )
     public List<String> generateAISuggestions(
             String resumeText,
             String jobDescriptionText,
