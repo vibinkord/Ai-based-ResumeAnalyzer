@@ -368,6 +368,70 @@ Required Skills: Java, Spring Boot, OOP, SQL, REST APIs, Microservices
 
 ---
 
+## 🔐 Authentication & Authorization
+
+The application features comprehensive **JWT-based authentication** with role-based access control (RBAC) for secure API access.
+
+### Security Features
+- ✅ **JWT Tokens** - Stateless authentication using JSON Web Tokens
+- ✅ **BCrypt Password Hashing** - Secure password storage
+- ✅ **Role-Based Access Control** - 4 role types with granular permissions
+- ✅ **Refresh Tokens** - Extended session management
+- ✅ **Public API Endpoints** - Analysis remains public for backward compatibility
+- ✅ **Protected Resources** - User data requires authentication
+
+### Authentication Endpoints
+
+```
+POST   /api/auth/login        - Login with email/password
+POST   /api/auth/register     - Register new user account
+POST   /api/auth/refresh-token - Get new access token
+POST   /api/auth/logout        - Logout (client-side token deletion)
+```
+
+### User Roles
+
+```
+ROLE_USER      - Standard user access (default)
+ROLE_ADMIN     - Administrative privileges
+ROLE_PREMIUM   - Premium features unlocked
+ROLE_ANALYST   - Advanced analytics access
+```
+
+### Quick Authentication Example
+
+```bash
+# Register new user
+curl -X POST http://localhost:8084/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "password123",
+    "fullName": "John Doe"
+  }'
+
+# Login and get token
+curl -X POST http://localhost:8084/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "password123"
+  }'
+
+# Use token in protected endpoints
+curl -X GET http://localhost:8084/api/resumes \
+  -H "Authorization: Bearer <access-token>"
+```
+
+### Security Configuration
+- **Production**: Uses environment variables for secrets (`JWT_SECRET`, `JWT_EXPIRATION`)
+- **Development**: Simple secrets suitable for local testing
+- **Testing**: H2 in-memory database with test-specific secrets
+
+📖 **Full Documentation**: See [docs/AUTHENTICATION.md](docs/AUTHENTICATION.md) for detailed authentication guide.
+
+---
+
 ## 🎯 Key Technical Concepts
 
 ### 1. Skill Extraction Algorithm
