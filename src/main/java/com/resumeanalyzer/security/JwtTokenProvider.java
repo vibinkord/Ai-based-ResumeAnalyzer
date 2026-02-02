@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -188,5 +189,42 @@ public class JwtTokenProvider {
      */
     public long getJwtRefreshExpirationMs() {
         return jwtRefreshExpirationMs;
+    }
+
+    /**
+     * Extract JWT token from HTTP request header
+     */
+    public String getTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
+    /**
+     * Extract user ID from JWT token
+     * Assumes user ID is stored in 'userId' claim or extracted from subject
+     */
+    public Long getUserIdFromToken(String token) {
+        try {
+            Claims claims = getClaimsFromToken(token);
+            // Try to get userId from claims first
+            Object userIdClaim = claims.get("userId");
+            if (userIdClaim != null) {
+                if (userIdClaim instanceof Number) {
+                    return ((Number) userIdClaim).longValue();
+                } else if (userIdClaim instanceof String) {
+                    return Long.parseLong((String) userIdClaim);
+                }
+            }
+            // If not found in claims, you might want to fetch from database using username
+            // This is a basic implementation
+            log.warn("UserId claim not found in token");
+            return null;
+        } catch (Exception e) {
+            log.error("Error extracting user ID from token: {}", e.getMessage());
+            return null;
+        }
     }
 }
