@@ -1,0 +1,609 @@
+{
+  "skills": [
+    {
+      "name": "Java",
+      "category": "Programming Language",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "ArrayList",
+      "category": "Java Collection",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "HashMap",
+      "category": "Java Collection",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "HashSet",
+      "category": "Java Collection",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "ExecutorService",
+      "category": "Java Concurrency",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "NIO",
+      "category": "Java I/O",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Python",
+      "category": "Programming Language",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "JavaScript",
+      "category": "Programming Language",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "TypeScript",
+      "category": "Programming Language",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "C++",
+      "category": "Programming Language",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "C#",
+      "category": "Programming Language",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Go",
+      "category": "Programming Language",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "Rust",
+      "category": "Programming Language",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "SQL",
+      "category": "Database",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "NoSQL",
+      "category": "Database",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "MongoDB",
+      "category": "Database",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "PostgreSQL",
+      "category": "Database",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "MySQL",
+      "category": "Database",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Redis",
+      "category": "Database",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Elasticsearch",
+      "category": "Database",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "Spring",
+      "category": "Framework",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Spring Boot",
+      "category": "Framework",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Spring Cloud",
+      "category": "Framework",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Hibernate",
+      "category": "ORM",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "JPA",
+      "category": "ORM",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "React",
+      "category": "Frontend Framework",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Angular",
+      "category": "Frontend Framework",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Vue.js",
+      "category": "Frontend Framework",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "Node.js",
+      "category": "Runtime",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Express",
+      "category": "Framework",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "HTML",
+      "category": "Markup Language",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "CSS",
+      "category": "Styling",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "SASS",
+      "category": "Styling",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Bootstrap",
+      "category": "CSS Framework",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Git",
+      "category": "Version Control",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "GitHub",
+      "category": "Version Control",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "GitLab",
+      "category": "Version Control",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Bitbucket",
+      "category": "Version Control",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Docker",
+      "category": "Containerization",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Kubernetes",
+      "category": "Orchestration",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "CI/CD",
+      "category": "DevOps",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Jenkins",
+      "category": "DevOps",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "GitLab CI",
+      "category": "DevOps",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "GitHub Actions",
+      "category": "DevOps",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "AWS",
+      "category": "Cloud",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Azure",
+      "category": "Cloud",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "GCP",
+      "category": "Cloud",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "AWS EC2",
+      "category": "Cloud",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "AWS S3",
+      "category": "Cloud",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "AWS Lambda",
+      "category": "Cloud",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "REST",
+      "category": "Architecture",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "RESTful",
+      "category": "Architecture",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "GraphQL",
+      "category": "Query Language",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "SOAP",
+      "category": "Protocol",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "gRPC",
+      "category": "Protocol",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "JSON",
+      "category": "Data Format",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "XML",
+      "category": "Data Format",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "YAML",
+      "category": "Data Format",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Protocol Buffers",
+      "category": "Data Format",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "Microservices",
+      "category": "Architecture",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Monolithic",
+      "category": "Architecture",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "API Design",
+      "category": "Design",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "System Design",
+      "category": "Design",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "OOP",
+      "category": "Programming Paradigm",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Functional Programming",
+      "category": "Programming Paradigm",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Design Patterns",
+      "category": "Software Design",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "SOLID",
+      "category": "Principles",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Unit Testing",
+      "category": "Testing",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "JUnit",
+      "category": "Testing Framework",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Mockito",
+      "category": "Testing Framework",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Jest",
+      "category": "Testing Framework",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Pytest",
+      "category": "Testing Framework",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Integration Testing",
+      "category": "Testing",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "TDD",
+      "category": "Methodology",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "BDD",
+      "category": "Methodology",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Agile",
+      "category": "Methodology",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Scrum",
+      "category": "Methodology",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Kanban",
+      "category": "Methodology",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Linux",
+      "category": "Operating System",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Windows",
+      "category": "Operating System",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "macOS",
+      "category": "Operating System",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Bash",
+      "category": "Shell",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Shell Scripting",
+      "category": "Scripting",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Maven",
+      "category": "Build Tool",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Gradle",
+      "category": "Build Tool",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "npm",
+      "category": "Package Manager",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "pip",
+      "category": "Package Manager",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Webpack",
+      "category": "Module Bundler",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Vite",
+      "category": "Module Bundler",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "Apache",
+      "category": "Web Server",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Nginx",
+      "category": "Web Server",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Tomcat",
+      "category": "Application Server",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Jetty",
+      "category": "Application Server",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "Kafka",
+      "category": "Message Queue",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "RabbitMQ",
+      "category": "Message Queue",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "ActiveMQ",
+      "category": "Message Queue",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "Communication",
+      "category": "Soft Skills",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Leadership",
+      "category": "Soft Skills",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Problem Solving",
+      "category": "Soft Skills",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Team Work",
+      "category": "Soft Skills",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Project Management",
+      "category": "Management",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Technical Writing",
+      "category": "Documentation",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Mentoring",
+      "category": "Leadership",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Code Review",
+      "category": "QA",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Performance Optimization",
+      "category": "Optimization",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Security",
+      "category": "Security",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Cybersecurity",
+      "category": "Security",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "OAuth",
+      "category": "Authentication",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "JWT",
+      "category": "Authentication",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "LDAP",
+      "category": "Authentication",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "Multithreading",
+      "category": "Concurrency",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Concurrency",
+      "category": "Concurrency",
+      "proficiency": "advanced"
+    },
+    {
+      "name": "Async/Await",
+      "category": "Asynchronous Programming",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "RxJava",
+      "category": "Reactive Programming",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Project Reactor",
+      "category": "Reactive Programming",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Machine Learning",
+      "category": "AI/ML",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "Deep Learning",
+      "category": "AI/ML",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "TensorFlow",
+      "category": "ML Framework",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "PyTorch",
+      "category": "ML Framework",
+      "proficiency": "beginner"
+    },
+    {
+      "name": "Data Analysis",
+      "category": "Data Science",
+      "proficiency": "intermediate"
+    },
+    {
+      "name": "Data Visualization",
+      "category": "Data Science",
+      "proficiency": "intermediate"
+    }
+  ]
+}
