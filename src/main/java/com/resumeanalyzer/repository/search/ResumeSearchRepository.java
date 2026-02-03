@@ -1,6 +1,7 @@
 package com.resumeanalyzer.repository.search;
 
 import com.resumeanalyzer.model.document.ResumeDocument;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
@@ -27,6 +28,11 @@ import java.util.List;
  * @version 1.0.0
  */
 @Repository
+@ConditionalOnProperty(
+    name = "elasticsearch.enabled",
+    havingValue = "true",
+    matchIfMissing = false
+)
 public interface ResumeSearchRepository extends ElasticsearchRepository<ResumeDocument, String> {
 
     /**
