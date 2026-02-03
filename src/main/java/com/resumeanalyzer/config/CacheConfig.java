@@ -1,6 +1,7 @@
 package com.resumeanalyzer.config;
 
 import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -91,8 +92,10 @@ public class CacheConfig {
     /**
      * Cache metrics bean for monitoring cache performance.
      * Tracks cache hits, misses, and evictions.
+     * Only created if MeterRegistry is available (when actuator is enabled).
      */
     @Bean
+    @ConditionalOnBean(MeterRegistry.class)
     public CacheMetrics cacheMetrics(MeterRegistry meterRegistry) {
         return new CacheMetrics(meterRegistry);
     }
