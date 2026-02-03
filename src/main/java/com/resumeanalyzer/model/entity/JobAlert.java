@@ -60,6 +60,7 @@ public class JobAlert {
     private AlertFrequency frequency; // DAILY, WEEKLY, MONTHLY
 
     @Column(name = "is_active", nullable = false)
+    @Builder.Default
     private Boolean isActive = true;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -72,12 +73,15 @@ public class JobAlert {
     private LocalDateTime lastSentAt;
 
     @Column(name = "match_threshold")
+    @Builder.Default
     private Double matchThreshold = 60.0; // Minimum match percentage required
 
     @Column(name = "send_email_notification", nullable = false)
+    @Builder.Default
     private Boolean sendEmailNotification = true;
 
     @OneToMany(mappedBy = "jobAlert", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<JobMatch> matches = new HashSet<>();
 
     @PrePersist

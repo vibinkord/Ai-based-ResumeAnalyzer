@@ -6,13 +6,14 @@ import com.resumeanalyzer.service.RedisCacheService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Performance Metrics REST Controller
@@ -31,13 +32,19 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/performance")
-@RequiredArgsConstructor
 @Tag(name = "Performance", description = "Performance monitoring and optimization endpoints")
 @SecurityRequirement(name = "bearer-jwt")
 public class PerformanceController {
 
     private final PerformanceService performanceService;
-    private final RedisCacheService cacheService;
+    private final Optional<RedisCacheService> cacheService;
+
+    @Autowired
+    public PerformanceController(PerformanceService performanceService,
+                               @Autowired(required = false) RedisCacheService cacheService) {
+        this.performanceService = performanceService;
+        this.cacheService = Optional.ofNullable(cacheService);
+    }
 
     /**
      * Get comprehensive performance metrics
@@ -150,7 +157,9 @@ public class PerformanceController {
     @Operation(summary = "Clear all Redis cache", description = "Clears all entries from Redis cache (use with caution)")
     public ResponseEntity<Map<String, String>> clearCache() {
         log.warn("Clearing all cache entries");
-        cacheService.clearAll();
+        if (cacheService.isPresent()) {
+            cacheService.get().clearAll();
+        }
         Map<String, String> response = new HashMap<>();
         response.put("message", "Cache cleared successfully");
         return ResponseEntity.ok(response);
@@ -168,7 +177,9 @@ public class PerformanceController {
     public ResponseEntity<Map<String, String>> clearCacheByPattern(
             @RequestParam String pattern) {
         log.warn("Clearing cache entries matching pattern: {}", pattern);
-        cacheService.deleteByPattern(pattern);
+        if (cacheService.isPresent()) {
+            cacheService.get().deleteByPattern(pattern);
+        }
         Map<String, String> response = new HashMap<>();
         response.put("message", "Cache entries cleared for pattern: " + pattern);
         return ResponseEntity.ok(response);
@@ -224,7 +235,11 @@ public class PerformanceController {
     public ResponseEntity<Map<String, String>> getCacheInfo() {
         log.info("Getting cache information");
         Map<String, String> info = new HashMap<>();
-        info.put("cache_status", cacheService.getStats());
+        if (cacheService.isPresent()) {
+            info.put("cache_status", cacheService.get().getStats());
+        } else {
+            info.put("cache_status", "Redis cache not available");
+        }
         return ResponseEntity.ok(info);
     }
 

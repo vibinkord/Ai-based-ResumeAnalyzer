@@ -1,8 +1,8 @@
 package com.resumeanalyzer.service;
 
 import com.resumeanalyzer.model.dto.PerformanceMetricsDto;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import io.micrometer.core.instrument.MeterRegistry;
 import java.lang.management.ManagementFactory;
@@ -11,6 +11,7 @@ import java.lang.management.ThreadMXBean;
 import java.lang.management.GarbageCollectorMXBean;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -30,15 +31,21 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class PerformanceService {
 
-    private final RedisCacheService redisCacheService;
-    private final MeterRegistry meterRegistry;
+    private final Optional<RedisCacheService> redisCacheService;
+    private final Optional<MeterRegistry> meterRegistry;
     private final AtomicLong cacheHits = new AtomicLong(0);
     private final AtomicLong cacheMisses = new AtomicLong(0);
     private final AtomicLong totalRequests = new AtomicLong(0);
     private final AtomicLong totalResponseTimeMs = new AtomicLong(0);
+
+    @Autowired
+    public PerformanceService(@Autowired(required = false) RedisCacheService redisCacheService, 
+                            @Autowired(required = false) MeterRegistry meterRegistry) {
+        this.redisCacheService = Optional.ofNullable(redisCacheService);
+        this.meterRegistry = Optional.ofNullable(meterRegistry);
+    }
 
     /**
      * Get comprehensive performance metrics
@@ -102,14 +109,26 @@ public class PerformanceService {
         try {
             // In a real scenario, these would be collected from the connection pool
             // For now, we provide placeholder values
-            return PerformanceMetricsDto.DatabaseStats.builder()
-                .totalQueries((long) meterRegistry.counter("sql.queries.total").count())
-                .avgQueryTime(meterRegistry.timer("sql.query.time").mean(java.util.concurrent.TimeUnit.MILLISECONDS))
-                .slowQueries((long) meterRegistry.counter("sql.queries.slow").count())
-                .activeConnections(2)
-                .maxConnections(20)
-                .poolStatus("HEALTHY")
-                .build();
+            if (meterRegistry.isPresent()) {
+                return PerformanceMetricsDto.DatabaseStats.builder()
+                    .totalQueries((long) meterRegistry.get().counter("sql.queries.total").count())
+                    .avgQueryTime(meterRegistry.get().timer("sql.query.time").mean(java.util.concurrent.TimeUnit.MILLISECONDS))
+                    .slowQueries((long) meterRegistry.get().counter("sql.queries.slow").count())
+                    .activeConnections(2)
+                    .maxConnections(20)
+                    .poolStatus("HEALTHY")
+                    .build();
+            } else {
+                // No meter registry available, return basic stats
+                return PerformanceMetricsDto.DatabaseStats.builder()
+                    .totalQueries(0)
+                    .avgQueryTime(0)
+                    .slowQueries(0)
+                    .activeConnections(2)
+                    .maxConnections(20)
+                    .poolStatus("HEALTHY")
+                    .build();
+            }
         } catch (Exception e) {
             log.warn("Error getting database stats: {}", e.getMessage());
             return PerformanceMetricsDto.DatabaseStats.builder()
@@ -260,7 +279,10 @@ public class PerformanceService {
      */
     private long estimateCacheKeys() {
         try {
-            String stats = redisCacheService.getStats();
+            if (!redisCacheService.isPresent()) {
+                return 0;
+            }
+            String stats = redisCacheService.get().getStats();
             // Parse and extract keys count from stats
             if (stats.contains("Keys=")) {
                 String[] parts = stats.split("Keys=");

@@ -1,7 +1,7 @@
 package com.resumeanalyzer.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,10 +30,14 @@ import java.util.Optional;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
+@ConditionalOnBean(RedisTemplate.class)
 public class RedisCacheService {
 
     private final RedisTemplate<String, Object> redisTemplate;
+
+    public RedisCacheService(RedisTemplate<String, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     /**
      * Get cached value by key

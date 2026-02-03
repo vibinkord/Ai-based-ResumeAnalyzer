@@ -8,7 +8,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-@Service
+@Deprecated
+// Use com.resumeanalyzer.service.EmailService instead
 public class EmailService {
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
     @Autowired public JavaMailSender mailSender;

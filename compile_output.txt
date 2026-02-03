@@ -1,0 +1,46 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< com.resumeanalyzer:resume-analyzer >-----------------
+[INFO] Building AI Resume Analyzer 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.3.2:clean (default-clean) @ resume-analyzer ---
+[INFO] Deleting /mnt/d/College project/Resume analyser/target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ resume-analyzer ---
+[INFO] Copying 4 resources from src/main/resources to target/classes
+[INFO] Copying 13 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ resume-analyzer ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 97 source files with javac [debug release 17] to target/classes
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/JobMatch.java:[54,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/JobMatch.java:[63,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/JobMatch.java:[66,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/NotificationPreference.java:[32,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/NotificationPreference.java:[35,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/NotificationPreference.java:[38,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/NotificationPreference.java:[41,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/NotificationPreference.java:[44,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/NotificationPreference.java:[49,29] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/NotificationPreference.java:[53,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/NotificationPreference.java:[56,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/NotificationPreference.java:[59,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/NotificationPreference.java:[63,20] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/NotificationPreference.java:[67,20] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/NotificationPreference.java:[71,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/JobAlert.java:[63,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/JobAlert.java:[75,20] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/JobAlert.java:[78,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/entity/JobAlert.java:[81,27] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/dto/LoginResponse.java:[29,20] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/model/dto/LoginResponse.java:[53,21] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[INFO] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/security/JwtTokenProvider.java: /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/security/JwtTokenProvider.java uses or overrides a deprecated API.
+[INFO] /mnt/d/College project/Resume analyser/src/main/java/com/resumeanalyzer/security/JwtTokenProvider.java: Recompile with -Xlint:deprecation for details.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  35.046 s
+[INFO] Finished at: 2026-02-02T17:53:06Z
+[INFO] ------------------------------------------------------------------------

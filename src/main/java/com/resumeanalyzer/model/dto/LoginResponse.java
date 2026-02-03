@@ -26,6 +26,7 @@ public class LoginResponse {
     private String refreshToken;
 
     @Schema(description = "Token type (Bearer)", example = "Bearer")
+    @Builder.Default
     private String tokenType = "Bearer";
 
     @Schema(description = "User ID", example = "1")
@@ -50,5 +51,6 @@ public class LoginResponse {
     private String message;
 
     @Schema(description = "Whether the operation was successful", example = "true")
+    @Builder.Default
     private Boolean success = true;
 }

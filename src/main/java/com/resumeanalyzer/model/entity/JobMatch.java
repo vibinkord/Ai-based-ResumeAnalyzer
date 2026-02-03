@@ -51,6 +51,7 @@ public class JobMatch {
     private String missingSkills; // Comma-separated
 
     @Column(name = "notification_sent", nullable = false)
+    @Builder.Default
     private Boolean notificationSent = false;
 
     @Column(name = "notification_sent_at")
@@ -60,9 +61,11 @@ public class JobMatch {
     private LocalDateTime createdAt;
 
     @Column(name = "is_viewed", nullable = false)
+    @Builder.Default
     private Boolean isViewed = false;
 
     @Column(name = "is_interested", nullable = false)
+    @Builder.Default
     private Boolean isInterested = false; // User marked as interested
 
     @PrePersist

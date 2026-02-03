@@ -7,7 +7,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-@Service
+@Deprecated
+// Use com.resumeanalyzer.service.JobAlertService instead
 @EnableScheduling
 public class JobAlertService {
     private static final Logger log = LoggerFactory.getLogger(JobAlertService.class);
